@@ -1,0 +1,12 @@
+{
+  "name": "shipyard-ai",
+  "owner": { "name": "지승용" },
+  "description": "팀 공용 Claude Code 플러그인 목록",
+  "plugins": [
+    {
+      "name": "qc-kit",
+      "source": "./plugins/qc-kit",
+      "description": "주간 품질검사 집계·감사·회의 문장과 원본 보호 훅"
+    }
+  ]
+}
