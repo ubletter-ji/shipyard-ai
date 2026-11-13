@@ -26,15 +26,15 @@ font:15px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR"
 main{max-width:1080px;margin:0 auto;padding:28px 16px 60px}
 h1{font-size:28px;font-weight:800;letter-spacing:-.7px;margin:0 0 4px;color:var(--accent)}.meta{color:var(--sub);font-size:13px;margin-bottom:20px}
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:12px 14px}
 .tile b{display:block;font-size:26px}.tile span{color:var(--sub);font-size:13px}
 .tile.t-go{border-top:4px solid var(--ok)}.tile.t-go b{color:var(--ok)}
 .tile.t-hold{border-top:4px solid var(--na)}
 .tile.t-bad{border-top:4px solid var(--bad)}.tile.t-bad b{color:var(--bad)}
 .tile.t-warn{border-top:4px solid var(--warn)}.tile.t-warn b{color:var(--warn)}
-.handoff{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:10px;
+.handoff{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:3px;
 padding:12px 16px;margin-bottom:22px}.handoff p{margin:4px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
+.card{background:var(--card);border:1px solid var(--line);border-radius:3px;margin-bottom:16px;overflow:hidden}
 .head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
 .head h2{font-size:18px;margin:0;flex:1 1 260px}.id{color:var(--sub);font-size:12px;display:block;font-weight:400}
 .badge{border-radius:3px;padding:3px 11px;font-size:13px;font-weight:700;white-space:nowrap}
@@ -43,11 +43,11 @@ padding:12px 16px;margin-bottom:22px}.handoff p{margin:4px 0}
 .warn{color:var(--warn);background:var(--warn-bg)}.pass{border:1px solid var(--line);color:var(--sub)}
 .facts{display:flex;flex-wrap:wrap;gap:4px 18px;padding:10px 18px;color:var(--sub);font-size:13px;border-bottom:1px solid var(--line)}
 .body{padding:12px 18px 16px}.clean{color:var(--ok);margin:4px 0}
-.issue{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+.issue{border:1px solid var(--line);border-radius:3px;padding:10px 12px;margin:10px 0}
 .issue.i-bad{border-left:5px solid var(--bad)}.issue.i-warn{border-left:5px solid var(--warn)}
 .issue.i-bad .t{color:var(--bad)}.issue.i-warn .t{color:var(--warn)}
 .issue .t{font-weight:700}.issue .t small{font-weight:400;color:var(--sub);margin-left:6px}
-.why{margin:4px 0 0}.ask{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--bg);display:flex;gap:10px;align-items:flex-start}
+.why{margin:4px 0 0}.ask{margin-top:8px;padding:8px 10px;border-radius:3px;background:var(--bg);display:flex;gap:10px;align-items:flex-start}
 .ask p{margin:0;flex:1}.ask button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;
 padding:3px 10px;cursor:pointer;font:inherit;font-size:12px;white-space:nowrap}
 .todo{margin-top:6px;font-size:13px;color:var(--warn)}
@@ -64,7 +64,7 @@ a.jump:hover{border-bottom-style:solid}
 .flash{animation:flash 1.6s ease-out}
 @keyframes flash{0%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 
-.origbtn{font-size:13px;padding:3px 11px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);white-space:nowrap}
+.origbtn{font-size:13px;padding:3px 11px;border:1px solid var(--line);border-radius:3px;text-decoration:none;color:var(--accent);white-space:nowrap}
 """
 
 JS = """

@@ -87,21 +87,21 @@ background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
 .cmpbtn:hover{border-color:var(--accent);color:var(--accent)}
 .toprow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 #compare{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
-#compare .doc{background:var(--card);border:1px solid var(--line);padding:22px 26px 26px}
-#compare .dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;
+.doc{background:var(--card);border:1px solid var(--line);padding:22px 26px 26px}
+.dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;
 background:var(--fill);color:var(--on);margin:-22px -26px 0;padding:18px 26px;border-bottom:4px solid var(--hi)}
-#compare .dochead h1{font-size:27px;font-weight:800;margin:0;color:var(--on);letter-spacing:-.8px;overflow-wrap:anywhere;
+.dochead h1{font-size:27px;font-weight:800;margin:0;color:var(--on);letter-spacing:-.8px;overflow-wrap:anywhere;
 display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
-#compare .dochead h1 .ttag{font-size:14px;font-weight:800;letter-spacing:0;padding:3px 10px;background:var(--hi);color:var(--on-hi)}
-#compare .dochead .cmpbtn{background:transparent;color:var(--on);border-color:rgba(255,255,255,.55)}
-#compare .dochead .cmpbtn:hover{background:var(--on);color:var(--fill)}
-#compare .dochead .meta{font-size:12.5px;color:var(--on);opacity:.85}
-#compare .doc{counter-reset:sec}
-#compare h2{counter-increment:sec;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;
+.dochead h1 .ttag{font-size:14px;font-weight:800;letter-spacing:0;padding:3px 10px;background:var(--hi);color:var(--on-hi)}
+.dochead .cmpbtn{background:transparent;color:var(--on);border-color:rgba(255,255,255,.55)}
+.dochead .cmpbtn:hover{background:var(--on);color:var(--fill)}
+.dochead .meta{font-size:12.5px;color:var(--on);opacity:.85}
+.doc{counter-reset:sec}
+.doc h2{counter-increment:sec;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;
 letter-spacing:-.5px;margin:28px 0 10px;padding-bottom:7px;color:var(--ink);border-bottom:2px solid var(--line)}
-#compare h2::before{content:counter(sec,decimal-leading-zero);font-size:13px;font-weight:800;letter-spacing:0;
+.doc h2::before{content:counter(sec,decimal-leading-zero);font-size:13px;font-weight:800;letter-spacing:0;
 background:var(--fill);color:var(--on);padding:3px 8px;line-height:1.3}
-#compare .lead{font-size:14px;margin:12px 0 0;color:var(--ink)}
+.doc .lead{font-size:14px;margin:12px 0 0;color:var(--ink)}
 .proc{display:flex;flex-direction:column;gap:8px}
 .frow{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:stretch}
 .frow .lab{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;letter-spacing:.3px;
@@ -157,7 +157,7 @@ color:var(--ink);cursor:pointer}.ctl button:hover{border-color:var(--accent)}
 .note{margin-top:8px;border:1px solid var(--line);border-left:4px solid var(--fill);background:var(--bg);padding:9px 12px;
 font-size:14px;min-height:40px}
 .foot{font-size:12px;color:var(--sub);margin-top:8px}
-@media (max-width:760px){#compare .doc{padding:16px 14px}#compare .dochead{margin:-16px -14px 0;padding:14px}#compare .dochead h1{font-size:22px}
+@media (max-width:760px){.doc{padding:16px 14px}.dochead{margin:-16px -14px 0;padding:14px}.dochead h1{font-size:22px}
 .frow{grid-template-columns:44px minmax(0,1fr);gap:4px}.frow .lab{font-size:11px;letter-spacing:0}
 .chev .p{padding:9px 2px 9px 13px;margin-left:-6px;
 clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%)}
@@ -168,6 +168,31 @@ table.cmpt col.who{width:46px!important}table.cmpt col.stg{width:58px!important}
 .bgsec{grid-template-columns:1fr}.arrowr{transform:rotate(90deg);height:26px}
 .keymsg{grid-template-columns:1fr}.keymsg>div{border-right:none;border-bottom:1px solid rgba(255,255,255,.25)}
 .keymsg b{font-size:17px}}
+
+/* ---- 시작·결과 화면: 업무 개선안과 같은 장표 디자인 */
+#start{max-width:1000px;padding:24px 16px 48px}
+#start .dochead h1{font-size:28px}
+.drop{border-radius:3px;margin:0 0 4px}
+.files{border-radius:0}.files img,.files .ph{border-radius:2px}
+.st{border-radius:2px}.ob{border-radius:3px}
+.go{margin-top:14px}.go button{border-radius:3px;padding:11px 40px;background:var(--fill);color:var(--on);font-weight:800}
+.steps li.run{color:var(--accent)}
+header{max-width:1160px;padding:24px 16px 0}
+header .doc{padding-bottom:18px}
+.dochead .hbtns{display:flex;gap:6px;flex-wrap:wrap}
+.dochead .cmpbtn{background:transparent;color:var(--on);border-color:rgba(255,255,255,.55)}
+.dochead .cmpbtn:hover{background:var(--on);color:var(--fill)}
+.rflow .p{padding-top:12px;padding-bottom:12px;cursor:default}
+.rflow .p small{display:block;font-size:12px;font-weight:700;opacity:.9}
+.rflow .p b{font-size:26px;letter-spacing:-.5px;line-height:1.2}
+.rflow .p span{font-size:12px}
+.origs{margin:0}.origs span{display:none}
+nav{border-bottom:3px solid var(--fill);gap:4px;margin-top:14px}
+nav button{border-radius:0;font-weight:800;letter-spacing:-.3px;padding:10px 20px}
+nav button[aria-selected=true]{background:var(--fill);color:var(--on);border-color:var(--fill)}
+.mbox,.notyet{border-radius:3px}
+@media (max-width:760px){.rflow .p b{font-size:18px}.rflow .p small,.rflow .p span{font-size:10px}
+.go button{width:100%}}
 """
 
 JS = r"""
@@ -460,12 +485,14 @@ def build() -> Path:
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>투자신청서 처리 결과</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>{CSS}</style></head><body>
-<section id="start">
-  <div class="toprow"><h1>투자신청서 점검</h1>
+<section id="start"><div class="doc">
+  <div class="dochead"><div><h1>투자신청서 점검 <span class="ttag">투자검토 · 투자회의</span></h1>
+    <div class="meta">신청서(.pptx) 첨부 → 조회 → 투자검토 결과·회의자료 · 원본은 수정하지 않음</div></div>
     <button class="cmpbtn" type="button" data-open="compare">업무 개선안 보기</button></div>
-  <div class="meta">투자신청서(.pptx)를 첨부하고 조회하면 투자검토 결과와 회의자료를 보여 줍니다. 원본은 수정하지 않습니다.</div>
+  <h2>신청서 첨부</h2>
   <label class="drop"><input type="file" accept=".pptx,.ppt" multiple>
     <b>투자신청서 첨부</b>여기로 끌어다 놓거나 눌러서 파일 선택 (.pptx · 표준양식이 아니어도 됨)</label>
+  <h2>접수 목록</h2>
   <table class="files"><thead><tr><th>미리보기</th><th>파일</th><th>크기</th><th>상태</th></tr></thead>
     <tbody>{file_rows}</tbody></table>
   <div class="go"><button id="run" type="button">조회</button>
@@ -476,25 +503,24 @@ def build() -> Path:
     <li>③ AI 판단 — 유형 일치 · 필요성 · 산출 재계산</li>
     <li>④ 회의 상정 · 경영계획 대조 · 회의자료</li>
   </ol>
-</section>
+</div></section>
 <div id="result" hidden>
-<header>
-  <h1>투자신청서 처리 결과 <a href="#" id="toStart" class="back">← 첨부 화면</a>
-    <a href="#compare" class="back" data-open="compare">업무 개선안</a></h1>
-  <div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 원본 신청서는 수정하지 않았습니다</div>
-  <div class="flow">
-    <div class="step"><h3>① 접수</h3><b>{len(inbox)}</b>건<div class="s">다른 양식 {converted}건 → 표준양식으로 변환</div></div>
-    <div class="arrow">→</div>
-    <div class="step"><h3>② 투자검토</h3><b class="ok">{passed}</b> 통과 · <b class="bad">{fix}</b> 보완 · <b class="warn">{check}</b> 확인
-      <div class="s">보완 = 신청자에게 문구 전달 / 확인 = 검토자 O</div></div>
-    <div class="arrow">→</div>
-    <div class="step go"><h3>③ 회의 상정</h3><b>{len(go)}</b>건<div class="s">보완 0 + 검토자 확인 완료 (R-401)</div></div>
-    <div class="arrow">→</div>
-    <div class="step"><h3>④ 회의자료</h3><b>{escape(meeting_label)}</b><div class="s">경영계획 대조 표지 + 신청서</div></div>
+<header><div class="doc">
+  <div class="dochead"><div><h1>투자신청서 처리 결과 <span class="ttag">{dt.datetime.now():%Y.%m.%d %H:%M}</span></h1>
+    <div class="meta">원본 신청서는 수정하지 않았습니다</div></div>
+    <div class="hbtns"><button class="cmpbtn" id="toStart" type="button">← 첨부 화면</button>
+    <button class="cmpbtn" type="button" data-open="compare">업무 개선안</button></div></div>
+  <h2>처리 현황</h2>
+  <div class="chev rflow">
+    <div class="p same"><small>① 접수</small><b>{len(inbox)}건</b><span>다른 양식 {converted}건 변환</span></div>
+    <div class="p auto"><small>② 투자검토</small><b>{passed} · {fix} · {check}</b><span>통과 · 보완 · 확인</span></div>
+    <div class="p key"><small>③ 회의 상정</small><b>{len(go)}건</b><span>보완 0 + 검토자 확인 (R-401)</span></div>
+    <div class="p auto"><small>④ 회의자료</small><b>{escape(meeting_label)}</b><span>계획 대조 표지 + 신청서</span></div>
   </div>
+  <h2>원본 신청서</h2>
   <div class="origs"><span>원본 신청서 보기</span>{chips}</div>
   <div class="notyet"></div>
-</header>
+</div></header>
 <nav role="tablist">
   <button role="tab" data-t="review" aria-selected="true">① 투자검토 결과</button>
   <button role="tab" data-t="meeting" aria-selected="false">② 회의자료</button>

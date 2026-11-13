@@ -27,9 +27,9 @@ main{max-width:1120px;margin:0 auto;padding:28px 16px 60px}
 h1{font-size:28px;font-weight:800;letter-spacing:-.7px;margin:0 0 4px;color:var(--accent)}h2{font-size:21px;font-weight:800;letter-spacing:-.5px;margin:0}
 .meta{color:var(--sub);font-size:13px;margin-bottom:18px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:12px 14px}
 .tile b{display:block;font-size:24px}.tile span{color:var(--sub);font-size:13px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 18px;margin-bottom:18px}
 .scroll{overflow-x:auto}
 table{border-collapse:collapse;width:100%}
 th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}
@@ -59,7 +59,7 @@ a.jump:hover{border-bottom-style:solid}
 .flash{animation:flash 1.6s ease-out}
 @keyframes flash{0%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 
-.origbtn{font-size:13px;padding:3px 11px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);white-space:nowrap}
+.origbtn{font-size:13px;padding:3px 11px;border:1px solid var(--line);border-radius:3px;text-decoration:none;color:var(--accent);white-space:nowrap}
 @media print{.origbtn{display:none}}
 @media print{body{background:#fff}.card{border:none;padding:0}.tiles{display:none}a{color:inherit;text-decoration:none}}
 """
