@@ -3,8 +3,8 @@
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
 --ok:#1e7a46;--bad:#b42318;--warn:#8a5a00;--tab:#eef1f5}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#2b323c;
---accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#222a34}}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
+--accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#2b3440}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 header{max-width:1160px;margin:0 auto;padding:24px 16px 0}
@@ -64,7 +64,7 @@ color:#fff;cursor:pointer}
 .steps li::before{content:'○ '}.steps li.done::before{content:'✔ '}.steps li.run::before{content:'▶ '}
 .notyet{max-width:1160px;margin:0 auto 10px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--warn);
 border-radius:10px;background:var(--card);font-size:14px;display:none}
-.back{font-size:13px;margin-left:10px}
+.back{font-size:13px;margin-left:10px;color:var(--accent)}
 
 /* ---- 업무 개선안 (AS-IS / TO-BE) — 보고서 장표 형식 */
 .cmpbtn{font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--line);border-radius:3px;
@@ -129,7 +129,7 @@ table.cmpt col.who{width:52px!important}table.cmpt col.stg{width:64px!important}
 <header>
   <h1>투자신청서 처리 결과 <a href="#" id="toStart" class="back">← 첨부 화면</a>
     <a href="#compare" class="back" data-open="compare">업무 개선안</a></h1>
-  <div class="meta">2026-11-13 14:05 · 원본 신청서는 수정하지 않았습니다</div>
+  <div class="meta">2026-11-13 14:08 · 원본 신청서는 수정하지 않았습니다</div>
   <div class="flow">
     <div class="step"><h3>① 접수</h3><b>5</b>건<div class="s">다른 양식 0건 → 표준양식으로 변환</div></div>
     <div class="arrow">→</div>
@@ -152,7 +152,7 @@ table.cmpt col.who{width:52px!important}table.cmpt col.stg{width:64px!important}
 &lt;style&gt;
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
 --ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#2b323c;
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
 --accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 &quot;Malgun Gothic&quot;,&quot;Apple SD Gothic Neo&quot;,&quot;Noto Sans KR&quot;,sans-serif}
@@ -223,7 +223,7 @@ r.selectNodeContents(b.previousElementSibling);getSelection().removeAllRanges();
 &lt;style&gt;
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#d9dde3;--accent:#1f3a5f;--label:#fff2cc;
 --head:#dbe5f1;--up:#b42318;--down:#1f5fbf;--warn:#8a5a00;--warn-bg:#fff4d6}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#323a45;
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
 --accent:#8fb3e0;--label:#3a3420;--head:#22324a;--up:#f2867b;--down:#7fb0f0;--warn:#e8c06a;--warn-bg:#352a12}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 &quot;Malgun Gothic&quot;,&quot;Apple SD Gothic Neo&quot;,&quot;Noto Sans KR&quot;,sans-serif}

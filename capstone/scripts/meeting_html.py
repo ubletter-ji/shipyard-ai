@@ -19,7 +19,7 @@ DETAIL_ROWS = [["투자시작", "투자경과", "투자금액(백만원)", "투�
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#d9dde3;--accent:#1f3a5f;--label:#fff2cc;
 --head:#dbe5f1;--up:#b42318;--down:#1f5fbf;--warn:#8a5a00;--warn-bg:#fff4d6}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#323a45;
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
 --accent:#8fb3e0;--label:#3a3420;--head:#22324a;--up:#f2867b;--down:#7fb0f0;--warn:#e8c06a;--warn-bg:#352a12}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}

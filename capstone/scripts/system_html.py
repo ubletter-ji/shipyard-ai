@@ -15,8 +15,8 @@ from common import OUT, ROOT
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
 --ok:#1e7a46;--bad:#b42318;--warn:#8a5a00;--tab:#eef1f5}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#2b323c;
---accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#222a34}}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
+--accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#2b3440}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 header{max-width:1160px;margin:0 auto;padding:24px 16px 0}
@@ -76,7 +76,7 @@ color:#fff;cursor:pointer}
 .steps li::before{content:'○ '}.steps li.done::before{content:'✔ '}.steps li.run::before{content:'▶ '}
 .notyet{max-width:1160px;margin:0 auto 10px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--warn);
 border-radius:10px;background:var(--card);font-size:14px;display:none}
-.back{font-size:13px;margin-left:10px}
+.back{font-size:13px;margin-left:10px;color:var(--accent)}
 
 /* ---- 업무 개선안 (AS-IS / TO-BE) — 보고서 장표 형식 */
 .cmpbtn{font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--line);border-radius:3px;

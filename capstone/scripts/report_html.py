@@ -19,7 +19,7 @@ _STATE = {
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
 --ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3}
-@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--ink:#e6e9ee;--sub:#9aa3b2;--line:#2b323c;
+@media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
 --accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
