@@ -1,0 +1,5 @@
+# Vercel 에는 정적 결과 화면(web/)만 올린다.
+# 파이썬 스크립트·requirements.txt 를 올리면 Vercel 이 파이썬 서버 앱으로 오인해 빌드가 실패한다.
+/*
+!/web
+!/vercel.json
