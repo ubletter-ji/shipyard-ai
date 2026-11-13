@@ -19,7 +19,14 @@
 ## 설치
 
 ```text
-/plugin install qna-helper@<마켓플레이스 이름>
+/plugin install qna-helper --marketplace ubletter-ji/shipyard-ai
+```
+
+Claude Code 2.1.275 이상에서 한 번에 됩니다. 그보다 낮은 버전에서는 마켓플레이스를 먼저 추가합니다.
+
+```text
+/plugin marketplace add ubletter-ji/shipyard-ai
+/plugin install qna-helper@shipyard-ai
 ```
 
 설치할 때 게시판 주소(예: `http://localhost:3001`)를 묻습니다. 나중에 바꾸려면 `/plugin configure qna-helper`를 씁니다.
