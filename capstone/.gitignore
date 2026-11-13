@@ -1,0 +1,18 @@
+# 산출물·백업 (실행하면 다시 생김)
+out/
+backup_*/
+__pycache__/
+*.pyc
+
+# 개인 설정·훅 상태
+.claude/settings.local.json
+.claude/hooks/.state/
+
+# 비밀 값 — 저장소에 두지 않는다
+.env
+.env.*
+*.pem
+*.key
+
+# Office 잠금 파일
+~$*

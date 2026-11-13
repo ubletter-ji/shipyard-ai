@@ -1,0 +1,54 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(./inbox/**)",
+      "Edit(./data/**)",
+      "Edit(./samples/**)",
+      "Edit(./backup_20261112/**)",
+      "Edit(./구현시나리오_보완.xlsx)",
+      "Edit(./표준양식_수정.pptx)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\"",
+            "timeout": 15,
+            "statusMessage": "안전장치 확인 중"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/inbox_watch.py\" snapshot",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/inbox_watch.py\" verify",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
