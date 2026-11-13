@@ -18,9 +18,9 @@ _STATE = {
 
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
---ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3;--on:#fff}
+--ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3;--on:#fff;--fill:#1f3a5f;--hi:#c2410c;--on-hi:#fff;--tab:#eef1f5}
 @media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
---accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584;--on:#0b0d11}}
+--accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584;--on:#0b0d11;--fill:#3a6aa8;--hi:#f59e4b;--on-hi:#1a1206;--tab:#2b3440}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;letter-spacing:-.1px;-webkit-font-smoothing:antialiased}
 main{max-width:1080px;margin:0 auto;padding:28px 16px 60px}
@@ -65,6 +65,30 @@ a.jump:hover{border-bottom-style:solid}
 @keyframes flash{0%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 
 .origbtn{font-size:13px;padding:3px 11px;border:1px solid var(--line);border-radius:3px;text-decoration:none;color:var(--accent);white-space:nowrap}
+
+/* ---- 장표 디자인 (업무 개선안·시작·결과 화면과 동일) */
+main{max-width:1120px;padding:24px 16px 48px}
+.doc{background:var(--card);border:1px solid var(--line);padding:22px 26px 26px;counter-reset:sec}
+.dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;background:var(--fill);
+color:#fff;margin:-22px -26px 0;padding:18px 26px;border-bottom:4px solid var(--hi)}
+.dochead h1{font-size:26px;font-weight:800;margin:0;color:#fff;letter-spacing:-.7px;display:flex;flex-wrap:wrap;
+align-items:center;gap:6px 12px}
+.dochead .ttag{font-size:14px;font-weight:800;letter-spacing:0;padding:3px 10px;background:var(--hi);color:var(--on-hi)}
+.dochead .meta{color:#fff;opacity:.85;margin:4px 0 0;font-size:12.5px}
+.doc h2.sec{counter-increment:sec;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;letter-spacing:-.5px;
+margin:28px 0 12px;padding-bottom:7px;color:var(--ink);border-bottom:2px solid var(--line)}
+.doc h2.sec::before{content:counter(sec,decimal-leading-zero);font-size:13px;font-weight:800;letter-spacing:0;
+background:var(--fill);color:#fff;padding:3px 8px;line-height:1.3}
+.sum{margin-bottom:0}.tile{border-radius:0}.tile b{font-weight:800;letter-spacing:-.5px}
+.handoff{border-radius:0;margin-bottom:0}
+.card{border-radius:0;box-shadow:none}
+.head{background:var(--tab)}.head h2{font-weight:800;letter-spacing:-.4px}
+.facts{background:var(--card)}
+.issue{border-radius:0}.ask{border-radius:0}.ask button{border-radius:3px}
+th{background:var(--tab);color:var(--ink)}
+summary{font-weight:700}
+footer{border-top:1px solid var(--line);padding-top:10px}
+@media (max-width:760px){.doc{padding:16px 14px}.dochead{margin:-16px -14px 0;padding:14px}.dochead h1{font-size:22px}}
 """
 
 JS = """
@@ -157,19 +181,22 @@ def write_html(reviews: list[dict], path: Path) -> Path:
     html = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>투자신청서 검토 결과</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>{CSS}</style></head><body><main>
-<h1>투자신청서 검토 결과</h1>
-<div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 신청서 {len(reviews)}건 · 원본 신청서는 수정하지 않았습니다</div>
+<style>{CSS}</style></head><body><main><div class="doc">
+<div class="dochead"><div><h1>투자신청서 검토 결과 <span class="ttag">신청서 {len(reviews)}건</span></h1>
+<div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 원본 신청서는 수정하지 않았습니다</div></div></div>
+<h2 class="sec">검토 요약</h2>
 <div class="sum">
 <div class="tile t-go"><b>{len(go)}</b><span>회의 상정</span></div>
 <div class="tile t-hold"><b>{len(held)}</b><span>보류</span></div>
 <div class="tile t-bad"><b>{n_bad}</b><span>보완 항목 (신청자 회신)</span></div>
 <div class="tile t-warn"><b>{n_judge}</b><span>판단 필요 (검토자 확인)</span></div>
 </div>
+<h2 class="sec">회의 상정 · 보류</h2>
 <div class="handoff">{handoff}</div>
+<h2 class="sec">신청서별 검토 결과</h2>
 {"".join(_card(r) for r in order)}
 <footer>판단 필요 항목에 동의하면 out/검토결과.xlsx ① 상세 검토의 '검토자 확인' 칸에 O 를 적고 저장하세요.
 보완 0건이고 판단 필요가 모두 확인된 신청서만 회의자료 에이전트가 받습니다 (R-401).</footer>
-</main><script>{JS}</script></body></html>"""
+</div></main><script>{JS}</script></body></html>"""
     path.write_text(html, encoding="utf-8")
     return path
