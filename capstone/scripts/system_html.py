@@ -200,6 +200,24 @@ nav button[aria-selected=true]{background:var(--fill);color:var(--on);border-col
 @media (max-width:760px){.rflow .p b{font-size:18px}.rflow .p small,.rflow .p span{font-size:10px}
 .go button{width:100%}}
 
+/* ---- 운영 규칙 · 안전장치: 파일 내용 */
+.layers.l4{grid-template-columns:repeat(4,minmax(0,1fr))}b.un{font-weight:800;font-size:14px}
+@media (max-width:760px){.layers.l4{grid-template-columns:1fr}}
+ul.plain{margin:0;padding-left:20px;font-size:14px}ul.plain li{margin:3px 0}ul.plain.in{padding-left:18px;font-size:13px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--line);margin:0 0 10px}
+.kv>div{padding:9px 12px;font-size:13.5px;border-right:1px solid var(--line);min-width:0;overflow-wrap:anywhere}
+.kv>div:last-child{border-right:none}.kv b{display:block;font-size:12px;color:var(--sub);margin-bottom:3px}
+.kv code,table.cmpt code{font-size:12px;background:var(--tab);padding:1px 5px;margin:1px 2px 1px 0;display:inline-block}
+.rgrid{border:1px solid var(--line)}
+.rg{display:grid;grid-template-columns:88px minmax(0,1fr);border-bottom:1px solid var(--line)}.rg:last-child{border-bottom:none}
+.rh{background:var(--tab);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center}
+.rcs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px}
+.rc{border:1px solid var(--line);padding:3px 8px;font-size:13px;cursor:help;background:var(--card)}
+.rc b{color:var(--accent);font-weight:800}.rc .tag{font-size:10.5px;padding:0 5px;margin-left:2px}
+details.more{margin:8px 0 0}details.more summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--accent);margin-bottom:6px}
+table.cmpt.mt{margin-top:12px}
+@media (max-width:760px){.kv{grid-template-columns:1fr}.kv>div{border-right:none;border-bottom:1px solid var(--line)}
+.rg{grid-template-columns:64px minmax(0,1fr)}}
 /* ---- 운영 규칙 · 안전장치 */
 #guide{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
 .layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line)}
@@ -431,79 +449,201 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     return html, json.dumps(note, ensure_ascii=False).replace("</", "<\\/")
 
 def _guide_html() -> str:
-    """운영 규칙 · 안전장치 화면: CLAUDE.md(규칙) · settings.json(권한 deny) · 훅."""
+    """운영 규칙 · 안전장치: CLAUDE.md · settings.json · 훅 파일에 적힌 주요 내용을 직접 읽어 보여 준다."""
+    import ast
+    import json
     import re
-    md = (ROOT / "CLAUDE.md").read_text(encoding="utf-8") if (ROOT / "CLAUDE.md").exists() else ""
-    n_r = len(re.findall(r"^\| R-\d+", md, re.M))
-    n_m = len(re.findall(r"^\| M-\d+", md, re.M))
-    n_t = len(re.findall(r"^\| T\d+", md, re.M))
+
+    def read(rel):
+        f = ROOT / rel
+        return f.read_text(encoding="utf-8") if f.exists() else ""
+
+    def clean(s):
+        return re.sub(r"\*\*|`", "", s).strip()
+
+    md = read("CLAUDE.md")
     today = dt.date.today()
 
-    md_rows = [
-        ("업무 규칙", f"검토 규칙 R-100~R-401 ({n_r}개) · 회의 매칭 M-0~M-9 ({n_m}개) · 정답셋 T1~T{n_t}",
-         "규칙의 기준 문서"),
-        ("작업 규칙", "원본 읽기 전용, 산출물은 out/ 에만 · 확정 판정 변경 금지 · 검토자 확인(O)은 사람만 · 비밀 값 저장 금지",
-         "훅이 강제"),
-        ("규칙 관리", "변경 순서 7단계 · 변경 이력(정한 사람) · 테스트가 문서와 코드 일치 확인", "합의 전 '판단 필요'"),
-    ]
-    hook_rows = [
-        ("도구 실행 직전", "PreToolUse", "guard.py", "원본 쓰기 · 위험 명령 · 비밀 값 저장 검사",
-         '<span class="tag block">에이전트 차단</span> <span class="tag ask">대화 세션 승인 요청</span>'),
-        ("에이전트 시작", "SubagentStart", "inbox_watch.py snapshot", "inbox · data · 기준 문서 지문(SHA-256) 기록",
-         '<span class="tag log">기록</span>'),
-        ("에이전트 종료", "SubagentStop", "inbox_watch.py verify", "지문 다시 계산해 비교",
-         '<span class="tag ask">바뀌면 경고</span>'),
-    ]
-    cases = [
-        ("수량 칸 변환 스크립트 실행", "guard.py", "원본(inbox) 을 바꾸는 도구 → 차단, 사용자가 터미널에서 직접 실행",
-         '<span class="tag block">차단</span>'),
-        ("원본 폴더(data/)가 들어간 복사 명령", "권한 deny", "원본 경로 작업 → 실행 전 차단", '<span class="tag block">차단</span>'),
-        ("명령에 data/ 언급 + 파일 저장", "guard.py", "원본 쓰기로 판단 → 차단 (안전한 쪽으로 동작)",
-         '<span class="tag block">차단</span>'),
-        ("invest-reviewer · invest-meeting 실행 4회", "inbox_watch.py", "원본 변경 경고 0건 (점검 3회는 전후 지문 동일 확인)",
-         '<span class="tag log">이상 없음</span>'),
-    ]
-    tr = lambda cells: "<tr>" + "".join(cells) + "</tr>"
-    md_html = "".join(tr([f'<td class="c stg">{escape(a)}</td>', f"<td>{escape(b)}</td>", f'<td class="c">{escape(c)}</td>'])
-                      for a, b, c in md_rows)
-    hook_html = "".join(tr([f'<td class="c stg">{escape(a)}<br><code>{escape(e)}</code></td>',
-                            f"<td><code>{escape(h)}</code></td>", f"<td>{escape(d)}</td>", f'<td class="c">{tag}</td>'])
-                        for a, e, h, d, tag in hook_rows)
-    case_html = "".join(tr([f"<td>{escape(a)}</td>", f'<td class="c">{escape(b)}</td>', f"<td>{escape(c)}</td>",
-                            f'<td class="c">{tag}</td>']) for a, b, c, tag in cases)
+    # --- CLAUDE.md: 작업 규칙 (원문 항목)
+    m = re.search(r"^## 작업 규칙[^\n]*\n(.*?)(?:\n---|\n## |\n# )", md, re.S | re.M)
+    work = [clean(x[2:]) for x in (m.group(1).splitlines() if m else []) if x.startswith("- ")]
+    work = [w for w in work if not w.startswith(("테스트:", "패키지:"))]
+    work_html = "".join(f"<li>{escape(w)}</li>" for w in work)
+
+    # --- CLAUDE.md: 판정 값 · 종합 상태
+    verdict = re.search(r"^판정 값은 (.+?)\.", md, re.M)
+    state = re.search(r"^종합 상태: (.+?)\.\s*$", md, re.M)
+    verdict_txt = clean(verdict.group(1)) if verdict else ""
+    state_txt = clean(state.group(1)) if state else ""
+
+    # --- CLAUDE.md: 검토 규칙 R (ID, 항목, 조건, 미충족 시, 주체)
+    rules = [tuple(clean(c) for c in r) for r in
+             re.findall(r"^\| (R-\d+) \| ([^|]+)\| ([^|]+)\| ([^|]+)\| ([^|]+)\|", md, re.M)]
+    groups = [("공통", "1"), ("유형", "20"), ("생산필수", "30"), ("노후교체", "31"), ("자동화", "32"), ("회의 상정", "4")]
+    def grp(rid):
+        n = rid[2:]
+        for name, pre in sorted(groups, key=lambda g: -len(g[1])):
+            if n.startswith(pre):
+                return name
+        return "기타"
+    def who_tag(w):
+        return "auto" if w == "스크립트" else ("key" if "AI" in w else "same")
+    rgrid = ""
+    for name, _ in groups:
+        items = [r for r in rules if grp(r[0]) == name]
+        if not items:
+            continue
+        chips = "".join(f'<span class="rc" title="{escape(r[2])}"><b>{escape(r[0])}</b> {escape(r[1])}'
+                        f' <span class="tag {who_tag(r[4])}">{escape(r[4])}</span></span>' for r in items)
+        rgrid += f'<div class="rg"><div class="rh">{escape(name)}</div><div class="rcs">{chips}</div></div>'
+    rtable = "".join(f'<tr><td class="c stg">{escape(r[0])}</td><td>{escape(r[1])}</td><td>{escape(r[2])}</td>'
+                     f'<td>{escape(r[3])}</td><td class="c">{escape(r[4])}</td></tr>' for r in rules)
+
+    # --- CLAUDE.md: 유형별 필수 부가 항목
+    req = [tuple(clean(c) for c in r) for r in
+           re.findall(r"^\| (견적서 비교|내년도 부하·조업도|현 장비 재원 소개|생산성 향상 산출) \|[^|]+\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|", md, re.M)]
+    mark = lambda v: '<span class="tag auto">필수</span>' if v == "필수" else ""
+    req_html = "".join(f'<tr><td class="stg">{escape(r[0])}</td><td class="c">{mark(r[1])}</td><td class="c">{mark(r[2])}</td>'
+                       f'<td class="c">{mark(r[3])}</td><td class="c">{escape(r[4])}</td></tr>' for r in req)
+
+    # --- CLAUDE.md: 경영계획 매칭 M
+    mrows = [tuple(clean(c) for c in r) for r in re.findall(r"^\| (M-\d) \| ([^|]+)\| ([^|]+)\| ([^|]+)\|", md, re.M)]
+    m_html = "".join(f'<tr><td class="c stg">{escape(r[0])}</td><td>{escape(r[1])}</td><td>{escape(r[2])}</td>'
+                     f'<td>{escape(r[3])}</td></tr>' for r in mrows)
+
+    # --- settings.json: 권한 deny
+    try:
+        deny = json.loads(read(".claude/settings.json")).get("permissions", {}).get("deny", [])
+    except ValueError:
+        deny = []
+    dgroups = [("원본 편집 금지", [d for d in deny if d.startswith("Edit(")]),
+               ("비밀 파일 읽기 금지", [d for d in deny if d.startswith("Read(")]),
+               ("위험 명령 금지", [d for d in deny if d.startswith("Bash(")])]
+    deny_html = "".join(f'<tr><td class="stg">{escape(n)}</td><td>' + " ".join(f"<code>{escape(x)}</code>" for x in xs)
+                        + "</td></tr>" for n, xs in dgroups if xs)
+
+    # --- guard.py: 설명(docstring) · 보호 대상 · 비밀 값 종류
+    gsrc = read(".claude/hooks/guard.py")
+    gdoc = ast.get_docstring(ast.parse(gsrc)) or "" if gsrc else ""
+    def section(doc, start, stop):
+        s = doc.find(start)
+        e = doc.find(stop, s + 1) if s >= 0 else -1
+        return doc[s + len(start):e if e > 0 else None] if s >= 0 else ""
+    blocks = re.findall(r"^\s*\d\. (.+?)(?=^\s*\d\. |\Z)", section(gdoc, "막는 것", "허용"), re.S | re.M)
+    blocks = [re.sub(r"\s+", " ", x).strip() for x in blocks]
+    handle = [re.sub(r"\s+", " ", x).strip() for x in re.findall(r"^\s*- (.+)$", section(gdoc, "원본 쓰기는", "막는 것"), re.M)]
+    allow = re.search(r"^허용: (.+)$", gdoc, re.M)
+    def const(name):
+        mm = re.search(rf"^{name} = (\[.*?\])", gsrc, re.M | re.S)
+        try:
+            return ast.literal_eval(mm.group(1)) if mm else []
+        except (ValueError, SyntaxError):
+            return []
+    prot = [f"{d}/" for d in const("PROTECTED_DIRS")] + ["backup_*/"] + const("PROTECTED_FILES")
+    secrets = list(dict.fromkeys(re.findall(r'^\s*\(r".*?", "(.+?)"\),?$', gsrc, re.M)))
+    block_html = "".join(f'<tr><td class="c stg">{i}</td><td>{escape(x)}</td></tr>' for i, x in enumerate(blocks, 1))
+    handle_html = "".join(f"<li>{escape(x)}</li>" for x in handle)
+
+    # --- inbox_watch.py: 감시 대상 · 동작
+    wsrc = read(".claude/hooks/inbox_watch.py")
+    wdoc = ast.get_docstring(ast.parse(wsrc)) or "" if wsrc else ""
+    wlines = [re.sub(r"\s+", " ", x).strip() for x in re.findall(r"^\s*(Subagent\w+\s+→.+)$", wdoc, re.M)]
+    wm = re.search(r"^WATCH = (\[.*?\])", wsrc, re.M)
+    fm = re.search(r"^FILES = (\[.*?\])", wsrc, re.M)
+    watch = ([f"{d}/" for d in ast.literal_eval(wm.group(1))] if wm else []) + (ast.literal_eval(fm.group(1)) if fm else [])
+    w_html = "".join(f"<li>{escape(x)}</li>" for x in wlines)
+
+    # --- 에이전트 · 스킬 (.claude/agents/*.md, .claude/skills/*/SKILL.md)
+    def front(src):
+        mm = re.match(r"---\n(.*?)\n---\n(.*)", src, re.S)
+        if not mm:
+            return {}, src
+        meta = dict(re.findall(r"^(\w+): (.+)$", mm.group(1), re.M))
+        return meta, mm.group(2)
+
+    def bullets(body, heading, n=3):
+        mm = re.search(rf"^## {heading}[^\n]*\n(.*?)(?=^## |^# |\Z)", body, re.S | re.M)
+        items = [clean(x[2:]) for x in (mm.group(1).splitlines() if mm else []) if x.startswith("- ")]
+        return items[:n]
+
+    def first_sentence(s):
+        """설명 앞 두 문장 (너무 길면 200자)."""
+        s = clean(s)
+        parts = re.split(r"(?<=\.) ", s)
+        out = " ".join(parts[:2])
+        return out if len(out) <= 200 else out[:200] + "…"
+
+    units = []
+    for f in sorted((ROOT / ".claude" / "agents").glob("*.md")):
+        meta, body = front(f.read_text(encoding="utf-8"))
+        rules_ = bullets(body, "절대 규칙") or bullets(body, "원칙")
+        units.append(("에이전트", meta.get("name", f.stem), first_sentence(meta.get("description", "")),
+                      meta.get("tools", ""), rules_, f".claude/agents/{f.name}"))
+    for f in sorted((ROOT / ".claude" / "skills").glob("*/SKILL.md")):
+        meta, body = front(f.read_text(encoding="utf-8"))
+        units.append(("스킬", meta.get("name", f.parent.name), first_sentence(meta.get("description", "")),
+                      "(호출한 에이전트의 도구 사용)", bullets(body, "원칙"), f".claude/skills/{f.parent.name}/SKILL.md"))
+        steps = [clean(x) for x in re.findall(r"^\d+\. (.+)$", body.split("## 절차", 1)[-1].split("\n## ", 1)[0], re.M)]
+    unit_html = "".join(
+        f'<tr><td class="c stg">{escape(k)}</td><td><b class="un">{escape(n)}</b><br><code>{escape(src)}</code></td>'
+        f'<td>{escape(d)}</td><td class="c">{escape(tl)}</td>'
+        f'<td><ul class="plain in">{"".join(f"<li>{escape(r)}</li>" for r in rs)}</ul></td></tr>'
+        for k, n, d, tl, rs, src in units)
+    skill_steps = "".join(f'<div class="p {"auto" if i % 2 else "same"}"><small>STEP {i}</small><b>{escape(re.split(r" — | → | \(|: |,", s)[0].strip()[:24])}</b></div>'
+                          for i, s in enumerate(locals().get("steps", []), 1))
+
+    codes = lambda xs: " ".join(f"<code>{escape(x)}</code>" for x in xs)
     return f"""<section id="guide" hidden>
  <div class="doc">
   <div class="dochead"><div><h1>운영 규칙 · 안전장치 <span class="ttag">CLAUDE.md · 훅</span></h1>
-    <div class="meta">{today:%Y.%m.%d} · 에이전트가 무엇을 따르고, 무엇을 못 하게 막는가</div></div>
+    <div class="meta">{today:%Y.%m.%d} · CLAUDE.md · settings.json · 훅 파일에 적힌 주요 내용 (파일에서 직접 읽어 표시)</div></div>
     <button class="cmpbtn" id="guideBack" type="button">돌아가기</button></div>
 
   <h2>구성 한눈에</h2>
-  <div class="layers">
-    <div><h3><small>① 규칙</small>CLAUDE.md</h3><div class="lx"><b>무엇을 해야 하나</b>업무 규칙·작업 규칙을 매 세션 읽고 따름</div></div>
-    <div><h3><small>② 권한</small>settings.json · deny</h3><div class="lx"><b>절대 못 하는 것</b>원본 편집 · .env 읽기 · 강제 push · reset --hard</div></div>
-    <div><h3><small>③ 훅</small>guard.py · inbox_watch.py</h3><div class="lx"><b>실행 전후 자동 검사</b>규칙을 어기는 실행은 막고, 원본 변경은 감지</div></div>
+  <div class="layers l4">
+    <div><h3><small>① 규칙</small>CLAUDE.md</h3><div class="lx"><b>무엇을 해야 하나</b>검토 규칙 {len(rules)}개 · 매칭 {len(mrows)}개 · 작업 규칙</div></div>
+    <div><h3><small>② 실행</small>에이전트 · 스킬</h3><div class="lx"><b>누가 하나</b>에이전트 {sum(1 for u in units if u[0] == "에이전트")}개 · 스킬 {sum(1 for u in units if u[0] == "스킬")}개</div></div>
+    <div><h3><small>③ 권한</small>settings.json · deny</h3><div class="lx"><b>절대 못 하는 것</b>deny {len(deny)}개</div></div>
+    <div><h3><small>④ 훅</small>guard · inbox_watch</h3><div class="lx"><b>실행 전후 자동 검사</b>막기 · 원본 변경 감지</div></div>
   </div>
 
-  <h2>CLAUDE.md — 에이전트가 따르는 규칙</h2>
-  <table class="cmpt"><colgroup><col class="stg" style="width:96px"><col><col style="width:150px"></colgroup>
-   <thead><tr><th>구분</th><th>내용</th><th>비고</th></tr></thead><tbody>{md_html}</tbody></table>
+  <h2>CLAUDE.md · 작업 규칙</h2>
+  <ul class="plain">{work_html}</ul>
 
-  <h2>훅 — 실행 전후 자동 안전장치</h2>
-  <table class="cmpt"><colgroup><col class="stg" style="width:130px"><col style="width:190px"><col><col style="width:200px"></colgroup>
-   <thead><tr><th>시점</th><th>훅</th><th>하는 일</th><th>처리</th></tr></thead><tbody>{hook_html}</tbody></table>
+  <h2>CLAUDE.md · 검토 규칙 ({len(rules)}개)</h2>
+  <div class="kv"><div><b>판정 값</b>{escape(verdict_txt)}</div><div><b>종합 상태</b>{escape(state_txt)}</div></div>
+  <div class="rgrid">{rgrid}</div>
+  <div class="legend"><span class="tag auto">스크립트</span> review.py 가 확정 <span class="tag key">AI</span> 점검 에이전트 판단
+    <span class="tag same">사람</span> 검토자 · 항목에 마우스를 올리면 판정 기준</div>
+  <details class="more"><summary>판정 기준 전체 보기 ({len(rules)}개)</summary>
+   <table class="cmpt"><colgroup><col class="stg" style="width:70px"><col style="width:120px"><col><col style="width:22%"><col style="width:80px"></colgroup>
+    <thead><tr><th>ID</th><th>항목</th><th>조건 (판정 기준)</th><th>미충족 시</th><th>주체</th></tr></thead><tbody>{rtable}</tbody></table></details>
+  <table class="cmpt mt"><colgroup><col style="width:150px"><col><col><col><col style="width:120px"></colgroup>
+   <thead><tr><th>유형별 필수 부가 항목</th><th>생산필수</th><th>노후교체</th><th>자동화</th><th>연결 규칙</th></tr></thead><tbody>{req_html}</tbody></table>
 
-  <h2>동작 흐름</h2>
-  <div class="chev guidechev">
-    <div class="p same"><small>STEP 1</small><b>CLAUDE.md 읽기</b><span>규칙·작업 범위 확인</span></div>
-    <div class="p auto"><small>STEP 2</small><b>실행 직전 검사</b><span>권한 deny + guard.py</span></div>
-    <div class="p key"><small>STEP 3</small><b>통과만 실행</b><span>막히면 이유 전달</span></div>
-    <div class="p auto"><small>STEP 4</small><b>종료 후 지문 비교</b><span>원본 바뀌면 경고</span></div>
-  </div>
+  <h2>CLAUDE.md · 경영계획 매칭 ({len(mrows)}개)</h2>
+  <table class="cmpt"><colgroup><col class="stg" style="width:64px"><col><col><col></colgroup>
+   <thead><tr><th>ID</th><th>상황</th><th>판정</th><th>표지 비고</th></tr></thead><tbody>{m_html}</tbody></table>
 
-  <h2>이번 작업에서 실제로 동작한 사례</h2>
-  <table class="cmpt"><colgroup><col><col style="width:120px"><col><col style="width:100px"></colgroup>
-   <thead><tr><th>시도</th><th>막은 곳</th><th>결과</th><th>처리</th></tr></thead><tbody>{case_html}</tbody></table>
-  <div class="foot">※ {today:%Y.%m.%d} 작업 기준 · 원본 = inbox/ · data/ · samples/ · backup_*/ · 기준 문서 2개</div>
+  <h2>에이전트 · 스킬</h2>
+  <table class="cmpt"><colgroup><col class="stg" style="width:76px"><col style="width:230px"><col><col style="width:120px"><col style="width:34%"></colgroup>
+   <thead><tr><th>종류</th><th>이름 · 파일</th><th>하는 일</th><th>도구</th><th>핵심 규칙</th></tr></thead><tbody>{unit_html}</tbody></table>
+  <div class="legend">invest-standardize 스킬 절차</div>
+  <div class="chev guidechev">{skill_steps}</div>
+
+  <h2>settings.json · 권한 deny</h2>
+  <table class="cmpt"><colgroup><col style="width:150px"><col></colgroup><tbody>{deny_html}</tbody></table>
+
+  <h2>guard.py · 실행 직전 안전장치 (PreToolUse)</h2>
+  <div class="kv"><div><b>보호 대상 (원본)</b>{codes(prot)}</div><div><b>허용</b>{escape(allow.group(1) if allow else "")}</div></div>
+  <table class="cmpt"><colgroup><col class="stg" style="width:50px"><col></colgroup>
+   <thead><tr><th>#</th><th>막는 것</th></tr></thead><tbody>{block_html}</tbody></table>
+  <div class="kv"><div><b>원본 쓰기 처리</b><ul class="plain in">{handle_html}</ul></div>
+    <div><b>비밀 값 감지</b>{codes(secrets)}</div></div>
+
+  <h2>inbox_watch.py · 원본 변경 감지 (SubagentStart / Stop)</h2>
+  <div class="kv"><div><b>감시 대상</b>{codes(watch)}</div><div><b>동작</b><ul class="plain in">{w_html}</ul></div></div>
+  <div class="foot">※ 표시 내용은 화면을 만든 시점({today:%Y.%m.%d})의 CLAUDE.md · .claude/settings.json · .claude/hooks/*.py 에서 읽음</div>
  </div>
 </section>"""
 
