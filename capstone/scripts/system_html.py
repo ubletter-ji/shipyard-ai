@@ -20,9 +20,9 @@ CSS = """
 --accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#2b3440;
 --fill:#3a6aa8;--on:#fff;--hi:#f59e4b;--on-hi:#1a1206;--hi-bg:#3a2614;--mute:#7c8594}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);
-font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+font:15px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;letter-spacing:-.1px;-webkit-font-smoothing:antialiased}
 header{max-width:1160px;margin:0 auto;padding:24px 16px 0}
-h1{font-size:24px;margin:0 0 2px;color:var(--accent)}.meta{color:var(--sub);font-size:13px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.6px;margin:0 0 2px;color:var(--accent)}.meta{color:var(--sub);font-size:13px}
 .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:16px 0}
 .step{flex:1 1 170px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .step h3{margin:0 0 4px;font-size:13px;color:var(--sub);font-weight:600}
@@ -55,7 +55,7 @@ color:var(--ink);cursor:pointer}.ob:hover{border-color:var(--accent);color:var(-
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:800px){.cmp{grid-template-columns:1fr}}
 
 #start{max-width:920px;margin:0 auto;padding:40px 16px 60px}
-#start h1{font-size:26px}
+#start h1{font-size:30px}
 .drop{display:block;margin:18px 0 14px;border:2px dashed var(--line);border-radius:14px;padding:26px 16px;text-align:center;
 background:var(--card);cursor:pointer;color:var(--sub)}
 .drop.over,.drop:hover{border-color:var(--accent);color:var(--accent)}
@@ -88,24 +88,38 @@ background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
 .toprow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 #compare{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
 #compare .doc{background:var(--card);border:1px solid var(--line);padding:22px 26px 26px}
-#compare .dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between;
-border-bottom:2px solid var(--accent);padding-bottom:8px}
-#compare .dochead h1{font-size:21px;margin:0;color:var(--ink);letter-spacing:-.2px;overflow-wrap:anywhere}
-#compare .dochead .meta{font-size:12px}
-#compare h2{font-size:15px;margin:22px 0 8px;color:var(--ink);padding-left:8px;border-left:4px solid var(--accent)}
+#compare .dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;
+background:var(--fill);color:var(--on);margin:-22px -26px 0;padding:18px 26px;border-bottom:4px solid var(--hi)}
+#compare .dochead h1{font-size:27px;font-weight:800;margin:0;color:var(--on);letter-spacing:-.8px;overflow-wrap:anywhere;
+display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+#compare .dochead h1 .ttag{font-size:14px;font-weight:800;letter-spacing:0;padding:3px 10px;background:var(--hi);color:var(--on-hi)}
+#compare .dochead .cmpbtn{background:transparent;color:var(--on);border-color:rgba(255,255,255,.55)}
+#compare .dochead .cmpbtn:hover{background:var(--on);color:var(--fill)}
+#compare .dochead .meta{font-size:12.5px;color:var(--on);opacity:.85}
+#compare .doc{counter-reset:sec}
+#compare h2{counter-increment:sec;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;
+letter-spacing:-.5px;margin:28px 0 10px;padding-bottom:7px;color:var(--ink);border-bottom:2px solid var(--line)}
+#compare h2::before{content:counter(sec,decimal-leading-zero);font-size:13px;font-weight:800;letter-spacing:0;
+background:var(--fill);color:var(--on);padding:3px 8px;line-height:1.3}
 #compare .lead{font-size:14px;margin:12px 0 0;color:var(--ink)}
-.proc{display:grid;grid-template-columns:64px repeat(6,minmax(0,1fr));gap:0;border:1px solid var(--line)}
-.proc>div{min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 6px;text-align:center;
-font-size:13px;overflow-wrap:anywhere}
-.proc>div:nth-child(7n){border-right:none}.proc>div:nth-last-child(-n+7){border-bottom:none}
-.proc .lab{background:var(--tab);font-weight:700;color:var(--sub);display:flex;align-items:center;justify-content:center}
-.proc .lab.to{background:var(--fill);color:var(--on)}
-.proc .p b{display:block;font-size:13px}.proc .p span{display:block;font-size:12px;color:var(--sub);margin-top:2px}
-/* AS-IS 는 흐리게, TO-BE 의 바뀐 단계만 진하게 */
-.proc .p:not(.auto):not(.key):not(.same){color:var(--mute)}.proc .p:not(.auto):not(.key):not(.same) span{color:var(--mute)}
-.proc .p.auto{background:var(--fill);color:var(--on)}.proc .p.auto span{color:var(--on);opacity:.85}
-.proc .p.key{background:var(--hi-bg);box-shadow:inset 0 0 0 3px var(--hi)}.proc .p.key b,.proc .p.key span{color:var(--hi);font-weight:700}
-.proc .p.on{outline:3px solid var(--ink);outline-offset:-3px}
+.proc{display:flex;flex-direction:column;gap:8px}
+.frow{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:stretch}
+.frow .lab{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;letter-spacing:.3px;
+background:var(--tab);color:var(--sub)}
+.frow .lab.to{background:var(--fill);color:var(--on)}
+.chev{display:flex;min-width:0}
+.chev .p{flex:1 1 0;min-width:0;margin-left:-8px;padding:11px 8px 11px 24px;text-align:center;cursor:pointer;
+background:var(--tab);color:var(--mute);overflow-wrap:anywhere;transition:transform .15s,filter .15s;
+clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%)}
+.chev .p:first-child{margin-left:0;padding-left:12px;
+clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%)}
+.chev .p b{display:block;font-size:14px;font-weight:800;letter-spacing:-.3px}
+.chev .p span{display:block;font-size:11.5px;font-weight:600;margin-top:1px;opacity:.9}
+.chev .p.same{background:var(--line);color:var(--ink)}
+.chev .p.auto{background:var(--fill);color:var(--on)}
+.chev .p.key{background:var(--hi);color:var(--on-hi)}
+.chev .p.on{transform:translateY(-4px);filter:brightness(1.1) saturate(1.15)}
+.chev .p.on:not(.auto):not(.key){background:var(--line);color:var(--ink)}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:2px;white-space:nowrap;line-height:1.5}
 .tag.auto{background:var(--fill);color:var(--on)}.tag.key{background:var(--hi);color:var(--on-hi)}
 .tag.same{border:1px solid var(--line);color:var(--sub);padding:1px 7px}
@@ -120,7 +134,7 @@ font-size:13px;overflow-wrap:anywhere}
 justify-content:space-around;gap:6px}
 .keymsg{display:grid;grid-template-columns:1fr 1.6fr 1fr;margin-top:0;background:var(--fill);color:var(--on)}
 .keymsg>div{padding:12px 16px;border-right:1px solid rgba(255,255,255,.25);min-width:0}.keymsg>div:last-child{border-right:none}
-.keymsg small{display:block;font-size:12px;opacity:.85}.keymsg b{display:block;font-size:20px;line-height:1.35;overflow-wrap:anywhere}
+.keymsg small{display:block;font-size:12.5px;font-weight:600;opacity:.85}.keymsg b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.35;overflow-wrap:anywhere}
 .keymsg .k{background:var(--hi);color:var(--on-hi)}
 table.cmpt{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
 table.cmpt th,table.cmpt td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}
@@ -134,6 +148,7 @@ table.cmpt tr.r-same td{color:var(--mute)}table.cmpt tr.r-same td.stg{color:var(
 table.cmpt tr.on td{background:var(--tab)}table.cmpt tr.on td:first-child{box-shadow:inset 5px 0 0 var(--ink)}
 table.cmpt tr.r-key.on td{background:var(--hi-bg)}
 table.cmpt tr[data-step]{cursor:pointer}
+table.cmpt td.tob{font-weight:700;color:var(--ink)}
 table.cmpt td.num{font-weight:700;font-size:15px;color:var(--accent)}
 .ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px}
 .ctl button{font:inherit;font-size:13px;padding:5px 14px;border:1px solid var(--line);border-radius:3px;background:var(--card);
@@ -142,10 +157,12 @@ color:var(--ink);cursor:pointer}.ctl button:hover{border-color:var(--accent)}
 .note{margin-top:8px;border:1px solid var(--line);border-left:4px solid var(--fill);background:var(--bg);padding:9px 12px;
 font-size:14px;min-height:40px}
 .foot{font-size:12px;color:var(--sub);margin-top:8px}
-@media (max-width:760px){#compare .doc{padding:16px 14px}
-.proc{grid-template-columns:52px repeat(3,minmax(0,1fr))}
-.proc>div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
-.proc .lab{grid-row:span 2}
+@media (max-width:760px){#compare .doc{padding:16px 14px}#compare .dochead{margin:-16px -14px 0;padding:14px}#compare .dochead h1{font-size:22px}
+.frow{grid-template-columns:44px minmax(0,1fr);gap:4px}.frow .lab{font-size:11px;letter-spacing:0}
+.chev .p{padding:9px 2px 9px 13px;margin-left:-6px;
+clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%)}
+.chev .p:first-child{padding-left:4px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%)}
+.chev .p b{font-size:11.5px;letter-spacing:-.5px}.chev .p span{font-size:10px}
 table.cmpt{font-size:12.5px}table.cmpt th,table.cmpt td{padding:6px}
 table.cmpt col.who{width:46px!important}table.cmpt col.stg{width:58px!important}table.cmpt col.chg{width:64px!important}
 .bgsec{grid-template-columns:1fr}.arrowr{transform:rotate(90deg);height:26px}
@@ -281,7 +298,8 @@ def _compare_html(reviews, go) -> tuple[str, str]:
             cls = "p" if side == "AS-IS" else "p " + change(c)[0]
             label = who + (" · 중점" if side == "TO-BE" and c[0] == KEY_STEP else "")
             cells.append(f'<div class="{cls}" data-step="{i}"><b>{escape(c[0])}</b><span>{escape(label)}</span></div>')
-        return f'<div class="lab{" to" if side == "TO-BE" else ""}">{side}</div>' + "".join(cells)
+        return (f'<div class="frow"><div class="lab{" to" if side == "TO-BE" else ""}">{side}</div>'
+                f'<div class="chev">{"".join(cells)}</div></div>')
 
     trs = "".join(
         f'<tr data-step="{i}" class="r-{change(c)[0]}"><td class="c stg">{escape(c[0])}</td>'
@@ -292,14 +310,15 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     n_auto = sum(1 for c in COMPARE if change(c)[0] == "auto")
 
     effect = [
-        ("서류 점검", "자동 일괄 점검", f"{len(reviews)}건 · {checked}항목"),
-        ("보완 요청", "송부용 문안 자동 작성", f"{fixes}건"),
-        ("담당자 판단", "판단 필요 항목만 선별", f"{judge}건"),
-        ("회의자료", "표지·첨부·브리핑 자동 작성", f"상정 {len(go)}건"),
-        ("담당자 역할", "서류 → 현장 중심", f"수행 단계 {before} → {after}"),
+        ("서류 점검", "건별 수작업 대조", "자동 일괄 점검", f"{len(reviews)}건 · {checked}항목"),
+        ("보완 요청", "담당자 직접 작성", "송부용 문안 자동 작성", f"{fixes}건"),
+        ("담당자 판단", "전 항목 직접 검토", "판단 필요 항목만 선별", f"{judge}건"),
+        ("회의자료", "요약장 수작업", "표지·첨부·브리핑 자동", f"상정 {len(go)}건"),
+        ("담당자 역할", "서류 점검 중심", "현장 확인 중심", f"수행 단계 {before} → {after}"),
     ]
-    eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c num">{escape(c)}</td></tr>'
-                  for a, b, c in effect)
+    eff = "".join(f'<tr><td class="c stg">{escape(a)}</td><td class="as">{escape(b)}</td>'
+                  f'<td class="tob">{escape(c)}</td><td class="c num">{escape(d)}</td></tr>'
+                  for a, b, c, d in effect)
     bg_rows = "".join(f'<tr><td class="c stg">{escape(a)}</td><td class="prob">{escape(b)}</td></tr>'
                       for a, b in BACKGROUND)
     dir_items = "".join(f"<li>{escape(x)}</li>" for x in DIRECTION)
@@ -307,7 +326,7 @@ def _compare_html(reviews, go) -> tuple[str, str]:
 
     html = f"""<section id="compare" hidden>
  <div class="doc">
-  <div class="dochead"><h1>투자검토 업무 개선안 (AS-IS / TO-BE)</h1>
+  <div class="dochead"><h1>투자검토 업무 개선안 <span class="ttag">AS-IS → TO-BE</span></h1>
     <div class="toprow"><span class="meta">{today:%Y.%m.%d} · 설비투자 투자검토·투자회의</span>
     <button class="cmpbtn" id="cmpBack" type="button">돌아가기</button></div></div>
   <h2>추진 배경</h2>
@@ -340,8 +359,8 @@ def _compare_html(reviews, go) -> tuple[str, str]:
   <div class="note"></div>
 
   <h2>기대 효과</h2>
-  <table class="cmpt"><colgroup><col style="width:110px"><col><col style="width:200px"></colgroup>
-   <thead><tr><th>구분</th><th>내용</th><th>적용 실적</th></tr></thead><tbody>{eff}</tbody></table>
+  <table class="cmpt"><colgroup><col class="stg" style="width:100px"><col><col><col style="width:170px"></colgroup>
+   <thead><tr><th>구분</th><th>AS-IS</th><th class="to">TO-BE</th><th>적용 실적</th></tr></thead><tbody>{eff}</tbody></table>
   <div class="foot">※ {today:%Y.%m.%d} 점검 기준 (익명화 샘플)</div>
  </div>
 </section>"""
@@ -439,6 +458,7 @@ def build() -> Path:
 
     html = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>투자신청서 처리 결과</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>{CSS}</style></head><body>
 <section id="start">
   <div class="toprow"><h1>투자신청서 점검</h1>

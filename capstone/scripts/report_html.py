@@ -22,9 +22,9 @@ CSS = """
 @media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
 --accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584;--on:#0b0d11}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
-font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+font:15px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;letter-spacing:-.1px;-webkit-font-smoothing:antialiased}
 main{max-width:1080px;margin:0 auto;padding:28px 16px 60px}
-h1{font-size:24px;margin:0 0 4px;color:var(--accent)}.meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+h1{font-size:28px;font-weight:800;letter-spacing:-.7px;margin:0 0 4px;color:var(--accent)}.meta{color:var(--sub);font-size:13px;margin-bottom:20px}
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .tile b{display:block;font-size:26px}.tile span{color:var(--sub);font-size:13px}
@@ -156,6 +156,7 @@ def write_html(reviews: list[dict], path: Path) -> Path:
                "</p>")
     html = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>투자신청서 검토 결과</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>{CSS}</style></head><body><main>
 <h1>투자신청서 검토 결과</h1>
 <div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 신청서 {len(reviews)}건 · 원본 신청서는 수정하지 않았습니다</div>
