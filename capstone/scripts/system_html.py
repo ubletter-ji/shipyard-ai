@@ -78,47 +78,47 @@ color:#fff;cursor:pointer}
 border-radius:10px;background:var(--card);font-size:14px;display:none}
 .back{font-size:13px;margin-left:10px}
 
-/* ---- 업무 개선 비교 (현재 업무 vs 에이전트 적용 후) */
-.cmpbtn{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border:1px solid var(--accent);border-radius:999px;
-background:var(--card);color:var(--accent);cursor:pointer;white-space:nowrap}
-.cmpbtn:hover{background:var(--accent);color:var(--card)}
+/* ---- 업무 개선안 (AS-IS / TO-BE) — 보고서 장표 형식 */
+.cmpbtn{font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--line);border-radius:3px;
+background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
+.cmpbtn:hover{border-color:var(--accent);color:var(--accent)}
 .toprow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-#compare{max-width:1160px;margin:0 auto;padding:28px 16px 48px}
-#compare h1{font-size:24px;overflow-wrap:anywhere}
-.lanes>div,.lanes .row>div{min-width:0;overflow-wrap:anywhere}
-.lanes{display:grid;grid-template-columns:120px 1fr 1fr;gap:0;margin-top:18px;background:var(--card);
-border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.lanes .hd{padding:12px 14px;font-weight:700;font-size:15px;border-bottom:1px solid var(--line);background:var(--tab)}
-.lanes .hd.after{color:var(--accent)}
-.lanes .stg,.lanes .cell{padding:12px 14px;border-bottom:1px solid var(--line);transition:opacity .25s,background .25s}
-.lanes .stg{font-weight:700;color:var(--sub);font-size:14px}
-.lanes .row:last-child>div{border-bottom:none}
-.lanes .row{display:contents}
-.cell b{display:block;font-size:15px;margin-bottom:2px}.cell .d{font-size:13px;color:var(--sub)}
-.who{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-bottom:4px}
-.who.h{background:#fde8e6;color:#9a2a1f}.who.a{background:#e3ecf8;color:#1f3a5f}.who.f{background:#e6f4ec;color:#1e6b3e}
-@media (prefers-color-scheme:dark){.who.h{background:#3a1e1b;color:#f2a49b}.who.a{background:#1d2a3b;color:#a9c6ec}
-.who.f{background:#16301f;color:#8fd8ab}}
-.cell.focus{background:linear-gradient(90deg,rgba(30,122,70,.10),transparent)}
-.lanes.stepping .row>div{opacity:.28}.lanes.stepping .row.cur>div{opacity:1}
-.lanes.stepping .row.cur .stg{color:var(--accent)}
-.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px}
-.ctl button{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border:1px solid var(--line);border-radius:10px;
-background:var(--card);color:var(--ink);cursor:pointer}
-.ctl button.pri{background:var(--accent);border-color:var(--accent);color:#fff}
-@media (prefers-color-scheme:dark){.ctl button.pri{color:#111418}}
-.ctl .s{color:var(--sub);font-size:13px}
-.say{margin-top:12px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--card);border-radius:10px;
-font-size:15px;min-height:48px}
-.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
-.sum .k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.sum .k h3{margin:0 0 4px;font-size:13px;color:var(--sub);font-weight:600}.sum .k b{font-size:22px}
-.sum .k .s{font-size:12px;color:var(--sub)}
-.legend{font-size:12px;color:var(--sub);margin-top:8px}
-@media (max-width:760px){.lanes{grid-template-columns:1fr}.lanes .hd.stghd{display:none}
-.lanes .stg{background:var(--tab);border-bottom:none;padding-bottom:4px}
-.lanes .hd{display:none}.lanes .cell::before{display:block;font-size:11px;color:var(--sub);margin-bottom:2px}
-.lanes .cell.bf::before{content:'현재 업무'}.lanes .cell.af::before{content:'개선 후'}}
+#compare{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
+#compare .doc{background:var(--card);border:1px solid var(--line);padding:22px 26px 26px}
+#compare .dochead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between;
+border-bottom:2px solid var(--accent);padding-bottom:8px}
+#compare .dochead h1{font-size:21px;margin:0;color:var(--ink);letter-spacing:-.2px;overflow-wrap:anywhere}
+#compare .dochead .meta{font-size:12px}
+#compare h2{font-size:15px;margin:22px 0 8px;color:var(--ink);padding-left:8px;border-left:4px solid var(--accent)}
+#compare .lead{font-size:14px;margin:12px 0 0;color:var(--ink)}
+.proc{display:grid;grid-template-columns:64px repeat(6,minmax(0,1fr));gap:0;border:1px solid var(--line)}
+.proc>div{min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 6px;text-align:center;
+font-size:13px;overflow-wrap:anywhere}
+.proc>div:nth-child(7n){border-right:none}.proc>div:nth-last-child(-n+7){border-bottom:none}
+.proc .lab{background:var(--tab);font-weight:700;color:var(--sub);display:flex;align-items:center;justify-content:center}
+.proc .p b{display:block;font-size:13px}.proc .p span{display:block;font-size:12px;color:var(--sub);margin-top:2px}
+.proc .p.sys span{color:var(--accent)}
+.proc .p.key{background:var(--tab)}.proc .p.key b{color:var(--accent)}
+.proc .p.on{outline:2px solid var(--accent);outline-offset:-2px}
+table.cmpt{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.cmpt th,table.cmpt td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}
+table.cmpt th{background:var(--tab);font-weight:700;color:var(--ink);text-align:center}
+table.cmpt td.c{text-align:center;color:var(--sub)}
+table.cmpt td.sys{color:var(--accent);font-weight:600}
+table.cmpt tr.on td{background:var(--tab)}table.cmpt tr.on td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+table.cmpt tr[data-step]{cursor:pointer}
+.ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.ctl button{font:inherit;font-size:13px;padding:5px 14px;border:1px solid var(--line);border-radius:3px;background:var(--card);
+color:var(--ink);cursor:pointer}.ctl button:hover{border-color:var(--accent)}
+.ctl .s{color:var(--sub);font-size:12px;margin-left:6px}
+.note{margin-top:8px;border:1px solid var(--line);background:var(--bg);padding:9px 12px;font-size:13.5px;min-height:40px}
+.foot{font-size:12px;color:var(--sub);margin-top:8px}
+@media (max-width:760px){#compare .doc{padding:16px 14px}
+.proc{grid-template-columns:52px repeat(3,minmax(0,1fr))}
+.proc>div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+.proc .lab{grid-row:span 2}
+table.cmpt{font-size:12.5px}table.cmpt th,table.cmpt td{padding:6px}
+table.cmpt col.who{width:52px!important}table.cmpt col.stg{width:64px!important}}
 """
 
 JS = r"""
@@ -178,108 +178,118 @@ document.getElementById('toStart').addEventListener('click',e=>{e.preventDefault
 if(/^#(result|meeting|orig=)/.test(location.hash)){startEl.hidden=true;resultEl.hidden=false;
  if(location.hash==='#meeting')requestAnimationFrame(()=>requestAnimationFrame(()=>{show('meeting');window.scrollTo(0,0)}))}
 
-// ---- 업무 개선 비교: 버튼으로 넘어가고, 단계별로 하나씩 짚어 설명
-const cmpEl=document.getElementById('compare'), lanes=document.querySelector('.lanes');
-const rows=[...document.querySelectorAll('.lanes .row')], say=document.querySelector('.say');
-const SAY=JSON.parse(document.getElementById('saydata').textContent);
+// ---- 업무 개선안: 버튼으로 넘어가고, 단계별로 짚어 설명
+const cmpEl=document.getElementById('compare');
+const NOTE=JSON.parse(document.getElementById('saydata').textContent);
+const nStep=NOTE.steps.length, noteEl=cmpEl.querySelector('.note');
 let cur=-1, from=startEl;
-function paint(){lanes.classList.toggle('stepping',cur>=0&&cur<rows.length);
- rows.forEach((r,k)=>r.classList.toggle('cur',k===cur));
- say.innerHTML=cur<0?SAY.intro:(cur<rows.length?SAY.steps[cur]:SAY.end);
- document.getElementById('cmpNext').textContent=cur<rows.length?'▶ 다음 단계':'처음부터';
- document.getElementById('cmpPos').textContent=cur<0?'전체 보기':(cur<rows.length?`${cur+1} / ${rows.length}`:'요약');
- document.querySelector('.sum').style.outline=cur>=rows.length?'2px solid var(--accent)':'none'}
+function paint(){cmpEl.querySelectorAll('[data-step]').forEach(e=>e.classList.toggle('on',+e.dataset.step===cur));
+ noteEl.innerHTML=cur<0?NOTE.intro:NOTE.steps[cur];
+ document.getElementById('cmpPos').textContent=cur<0?'전체':`${cur+1} / ${nStep}`}
 function openCompare(back){from=back;startEl.hidden=true;resultEl.hidden=true;cmpEl.hidden=false;cur=-1;paint();window.scrollTo(0,0)}
 function closeCompare(){cmpEl.hidden=true;from.hidden=false;window.scrollTo(0,0)}
 document.querySelectorAll('[data-open=compare]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();
  openCompare(resultEl.hidden?startEl:resultEl)}));
 document.getElementById('cmpBack').addEventListener('click',closeCompare);
-document.getElementById('cmpNext').addEventListener('click',()=>{cur=cur>rows.length-1?-1:cur+1;paint()});
-document.getElementById('cmpPrev').addEventListener('click',()=>{cur=Math.max(-1,cur-1);paint()});
-rows.forEach((r,k)=>r.addEventListener('click',()=>{cur=k;paint()}));
+document.getElementById('cmpNext').addEventListener('click',()=>{cur=cur>=nStep-1?-1:cur+1;paint()});
+document.getElementById('cmpPrev').addEventListener('click',()=>{cur=cur<=-1?nStep-1:cur-1;paint()});
+document.getElementById('cmpAll').addEventListener('click',()=>{cur=-1;paint()});
+cmpEl.querySelectorAll('[data-step]').forEach(e=>e.addEventListener('click',()=>{cur=+e.dataset.step;paint()}));
 document.addEventListener('keydown',e=>{if(cmpEl.hidden||modal.classList.contains('on'))return;
- if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();document.getElementById('cmpNext').click()}
+ if(e.key==='ArrowRight'){e.preventDefault();document.getElementById('cmpNext').click()}
  else if(e.key==='ArrowLeft'){e.preventDefault();document.getElementById('cmpPrev').click()}
  else if(e.key==='Escape')closeCompare()});
 if(location.hash==='#compare')openCompare(startEl);
 """
 
-# 업무 개선 비교 — (단계, 현재 업무, 개선 후, 설명). who: h=담당자, a=AI 에이전트, f=사람(집중)
+# 업무 개선안 (AS-IS / TO-BE) — (단계, AS-IS 주체, AS-IS 내용, TO-BE 주체, TO-BE 내용, 단계 설명)
+# 주체가 '시스템'이면 자동 처리, KEY_STEP 은 담당자가 집중할 단계
 COMPARE = [
-    ("접수",
-     ("h", "담당자", "신청서 접수", "내부 결재 후 통보된 신청서를 담당자가 모아 정리"),
-     ("a", "그대로", "inbox 에 접수", "신청서 pptx 를 inbox 폴더에 넣으면 끝"),
-     "접수 방식은 그대로입니다. 신청서 파일을 inbox 에 넣는 것으로 시작합니다."),
-    ("양식 점검",
-     ("h", "담당자", "양식 확인", "칸이 빠졌는지, 다른 양식인지 하나씩 열어 확인"),
-     ("a", "AI 에이전트", "양식 확인 · 표준양식 변환", "다른 양식은 내용 그대로 표준양식으로 옮기고 추가·누락 0건을 자동 검증"),
-     "담당자가 파일을 하나씩 열어 보던 양식 확인을 에이전트가 합니다. 다른 양식도 내용을 바꾸지 않고 표준양식으로 옮깁니다."),
-    ("내용 점검",
-     ("h", "담당자", "내용 점검", "수량·금액·견적·업체 업력·유형별 필수 항목을 사람이 대조, 보완 요청 메일 작성"),
-     ("a", "AI 에이전트", "규칙 점검 + 보완 문구 작성", "R-100~R-322 규칙을 스크립트가 확정, 유형 일치·필요성·산출 재계산은 AI 가 판단. 신청자에게 보낼 문장까지 작성"),
-     "수량 계산, 견적 금액 대조, 신생 업체 확인처럼 사람이 표를 대조하던 일을 규칙으로 바꿨습니다. 신청자에게 보낼 보완 요청 문장도 바로 쓸 수 있게 만들어 줍니다."),
-    ("현장 확인",
-     ("h", "담당자", "현장 확인", "점검에 시간을 쓴 뒤 남은 시간으로 현장 확인"),
-     ("f", "담당자 · 집중", "현장 확인 + 판단", "에이전트가 정리한 보완·판단 필요 목록을 들고 현장 확인. 판단 필요 행은 검토자가 확인(O)"),
-     "담당자의 시간은 여기에 씁니다. 서류 대조는 에이전트가 끝냈으니, 담당자는 현장에서 실제 장비·위치·필요성을 확인하고 판단이 필요한 항목만 결정합니다."),
-    ("회의자료",
-     ("h", "담당자", "요약장 + 자료 세팅", "경영계획과 대조해 변경 사항을 요약장 한 장에 정리, 신청서 자료 묶기"),
-     ("a", "AI 에이전트", "회의자료 자동 작성", "상정 건만 골라 경영계획과 대조(M-0~M-9)한 표지 + 신청서 원본 첨부 + 의장 브리핑"),
-     "요약장과 자료 준비는 에이전트가 합니다. 계획 대비 위치·수량·금액 변경과 계획 外 건을 표지에 자동으로 표시합니다."),
-    ("회의",
-     ("h", "담당자", "회의 진행", ""),
-     ("f", "사람", "회의 진행 · 의사결정", "'확인 필요' 표시 건(계획 外 등)을 중심으로 결정"),
-     "회의와 결정은 그대로 사람이 합니다. 표지의 '확인 필요' 건에 집중하면 됩니다."),
+    ("접수", "담당자", "결재 완료 신청서 수합·목록 정리",
+     "담당자", "신청서 파일 지정 폴더(inbox) 등록",
+     "접수 방식 변경 없음. 결재 완료 신청서를 지정 폴더에 등록하는 것으로 착수."),
+    ("양식 점검", "담당자", "신청서별 양식·누락 칸 육안 확인",
+     "시스템", "표준양식 여부 판정, 타 양식은 표준양식으로 변환 (내용 동일 여부 자동 검증)",
+     "신청서를 한 건씩 열어 확인하던 작업을 시스템이 일괄 처리. 타 양식도 내용 변경 없이 표준양식으로 통일."),
+    ("내용 점검", "담당자", "수량·금액·견적·업체 업력·유형별 필수 항목 대조, 보완 요청 작성",
+     "시스템", "검토 기준(R-100~R-322) 일괄 점검, 보완 요청 문안 작성",
+     "수량 한도, 견적 금액 일치, 신생 업체 여부 등 대조 작업을 검토 기준으로 정형화. 신청자 송부용 보완 요청 문안까지 작성."),
+    ("현장 확인", "담당자", "서류 점검 후 잔여 시간 내 수행",
+     "담당자", "점검 결과(보완·판단 필요 항목) 기준 현장 확인, 판단 필요 항목 확정",
+     "담당자 업무의 중심. 서류 대조 부담이 없어진 만큼 실제 장비·설치 위치·필요성 확인에 집중하고, 판단 필요 항목만 확정."),
+    ("회의자료", "담당자", "경영계획 대비 변경 사항 요약장 작성, 신청서 자료 편철",
+     "시스템", "상정 건 경영계획 대조(M-0~M-9), 표지·원본 첨부·브리핑 작성",
+     "경영계획 대비 위치·수량·금액 변경 및 계획 외 건을 표지에 자동 표기. 상정 건 원본을 순서대로 첨부."),
+    ("투자회의", "회의체", "회의 진행·심의",
+     "회의체", "'확인 필요' 표기 건 중심 심의·의사결정",
+     "회의 진행과 의사결정은 기존과 동일. 표지의 '확인 필요' 건(계획 외 등)을 중심으로 심의."),
 ]
+KEY_STEP = "현장 확인"
 
 
 def _compare_html(reviews, go) -> tuple[str, str]:
-    """업무 개선 비교 화면 (HTML, 설명 문구 JSON)."""
+    """업무 개선안 화면 (HTML, 단계 설명 JSON)."""
     import json
     rows = [x for r in reviews for x in r["rows"]]
     checked = sum(1 for x in rows if x["판정"] != "해당 없음")
     fixes = sum(1 for x in rows if x["판정"] == "보완" and x.get("보완요청문구"))
     judge = sum(1 for x in rows if x["판정"] == "판단 필요")
-    ai = sum(1 for x in rows if x["규칙ID"] in ("R-201", "R-301", "R-322") and x["판정"] != "해당 없음")
+    before = sum(1 for c in COMPARE if c[1] == "담당자")
+    after = sum(1 for c in COMPARE if c[3] == "담당자")
+    today = dt.date.today()
 
-    def cell(c, side):
-        who, label, title, desc = c
-        cls = "cell " + side + (" focus" if who == "f" else "")
-        return (f'<div class="{cls}"><span class="who {who}">{escape(label)}</span><b>{escape(title)}</b>'
-                + (f'<div class="d">{escape(desc)}</div>' if desc else "") + "</div>")
+    def proc(side):
+        cells = []
+        for i, c in enumerate(COMPARE):
+            who = c[1] if side == "AS-IS" else c[3]
+            cls = "p" + (" sys" if who == "시스템" else "") + (" key" if side == "TO-BE" and c[0] == KEY_STEP else "")
+            cells.append(f'<div class="{cls}" data-step="{i}"><b>{escape(c[0])}</b><span>{escape(who)}</span></div>')
+        return f'<div class="lab">{side}</div>' + "".join(cells)
 
-    body = "".join(f'<div class="row"><div class="stg">{escape(s)}</div>{cell(b, "bf")}{cell(a, "af")}</div>'
-                   for s, b, a, _ in COMPARE)
-    human_before = sum(1 for _, b, _, _ in COMPARE if b[0] == "h")
-    human_after = sum(1 for _, _, a, _ in COMPARE if a[0] == "f")
+    trs = "".join(
+        f'<tr data-step="{i}"><td class="c">{escape(s)}</td><td>{escape(at)}</td><td class="c">{escape(aw)}</td>'
+        f'<td>{escape(tt)}</td><td class="c{" sys" if tw == "시스템" else ""}">{escape(tw)}</td></tr>'
+        for i, (s, aw, at, tw, tt, _) in enumerate(COMPARE))
+
+    effect = [
+        ("서류 점검", "검토 기준에 따른 일괄 점검으로 담당자 대조 작업 대체",
+         f"신청서 {len(reviews)}건 · 점검 {checked}항목"),
+        ("보완 요청", "신청자 송부용 보완 요청 문안 자동 작성", f"{fixes}건"),
+        ("담당자 판단", "판단이 필요한 항목만 선별해 담당자 확정", f"{judge}건"),
+        ("회의자료", "경영계획 대조 표지·원본 첨부·브리핑 자동 작성", f"상정 {len(go)}건"),
+        ("담당자 역할", "서류 점검 중심 → 현장 확인 중심으로 전환", f"담당자 수행 단계 {before} → {after}"),
+    ]
+    eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c">{escape(c)}</td></tr>'
+                  for a, b, c in effect)
+
     html = f"""<section id="compare" hidden>
-  <div class="toprow"><h1>업무 개선 비교 — 투자검토 · 투자회의</h1>
-    <button class="cmpbtn" id="cmpBack" type="button">← 돌아가기</button></div>
-  <div class="meta">현재 업무는 담당자가 모든 단계를 처리합니다. 에이전트를 적용하면 서류 점검과 회의자료는 AI 가 하고, 담당자는 <b>현장 확인</b>과 판단에 집중합니다.</div>
-  <div class="lanes">
-    <div class="hd stghd">단계</div><div class="hd">현재 업무</div><div class="hd after">개선 후 (AI 에이전트 적용)</div>
-    {body}
-  </div>
-  <div class="legend"><span class="who h">담당자</span> 사람이 직접 처리 · <span class="who a">AI 에이전트</span> 에이전트가 처리 · <span class="who f">사람 · 집중</span> 사람이 집중할 일</div>
-  <div class="ctl"><button id="cmpPrev" type="button">◀ 이전</button><button id="cmpNext" class="pri" type="button">▶ 다음 단계</button>
-    <span class="s" id="cmpPos">전체 보기</span><span class="s">· 키보드 ← → 로 넘기기, 단계를 눌러도 됩니다</span></div>
-  <div class="say"></div>
-  <div class="sum">
-    <div class="k"><h3>담당자가 직접 하는 단계</h3><b>{human_before} → {human_after}</b><div class="s">현장 확인 · 회의만 사람이 (나머지는 에이전트)</div></div>
-    <div class="k"><h3>이번 점검 · 신청서</h3><b>{len(reviews)}건</b><div class="s">규칙 점검 {checked}행 (해당 없음 제외) · AI 판단 {ai}행</div></div>
-    <div class="k"><h3>보완 요청 문구 자동 작성</h3><b>{fixes}건</b><div class="s">신청자에게 그대로 보낼 수 있는 문장</div></div>
-    <div class="k"><h3>담당자 판단으로 넘긴 항목</h3><b>{judge}건</b><div class="s">판단 필요 → 현장 확인 후 검토자 확인(O)</div></div>
-    <div class="k"><h3>회의 상정</h3><b>{len(go)}건</b><div class="s">표지 · 원본 첨부 · 브리핑 자동 작성</div></div>
-  </div>
-</section>"""
-    say = {"intro": "<b>전체 보기</b> — 왼쪽은 지금 담당자가 하는 일, 오른쪽은 에이전트 적용 후입니다. "
-                    "<b>▶ 다음 단계</b>를 누르면 단계별로 짚어 설명합니다.",
-           "steps": [f"<b>{i + 1}. {escape(s)}</b> — {escape(t)}" for i, (s, _, _, t) in enumerate(COMPARE)],
-           "end": f"<b>요약</b> — 담당자가 직접 하던 {human_before}단계 중 서류 점검과 회의자료는 에이전트가 맡고, "
-                  f"담당자는 <b>현장 확인과 판단</b>에 집중합니다. 이번 점검에서도 신청서 {len(reviews)}건의 규칙 {checked}행을 "
-                  f"에이전트가 점검했고, 보완 문구 {fixes}건을 만들었으며, 사람이 판단할 항목은 {judge}건으로 줄었습니다."}
-    return html, json.dumps(say, ensure_ascii=False).replace("</", "<\\/")
+ <div class="doc">
+  <div class="dochead"><h1>투자검토 업무 개선안 (AS-IS / TO-BE)</h1>
+    <div class="toprow"><span class="meta">{today:%Y.%m.%d} · 설비투자 투자검토·투자회의</span>
+    <button class="cmpbtn" id="cmpBack" type="button">돌아가기</button></div></div>
+  <p class="lead">신청서 양식·내용 점검과 회의자료 작성은 시스템이 처리하고, 담당자는 <b>현장 확인</b>과 판단 업무에 집중함.</p>
 
+  <h2>업무 절차</h2>
+  <div class="proc">{proc("AS-IS")}{proc("TO-BE")}</div>
+
+  <h2>단계별 비교</h2>
+  <table class="cmpt"><colgroup><col class="stg" style="width:90px"><col><col class="who" style="width:72px"><col><col class="who" style="width:72px"></colgroup>
+   <thead><tr><th>단계</th><th>AS-IS</th><th>수행</th><th>TO-BE</th><th>수행</th></tr></thead>
+   <tbody>{trs}</tbody></table>
+  <div class="ctl"><button id="cmpPrev" type="button">이전</button><button id="cmpNext" type="button">다음</button>
+    <button id="cmpAll" type="button">전체</button><span class="s" id="cmpPos">전체</span>
+    <span class="s">← → 키 또는 단계를 눌러 이동</span></div>
+  <div class="note"></div>
+
+  <h2>기대 효과</h2>
+  <table class="cmpt"><colgroup><col style="width:110px"><col><col style="width:200px"></colgroup>
+   <thead><tr><th>구분</th><th>내용</th><th>적용 실적</th></tr></thead><tbody>{eff}</tbody></table>
+  <div class="foot">※ 적용 실적은 {today:%Y.%m.%d} 점검 기준 (익명화 샘플 신청서). 점검 항목 수는 '해당 없음' 제외.</div>
+ </div>
+</section>"""
+    note = {"intro": "<b>단계 설명</b> · 이전/다음 버튼으로 단계별 AS-IS 대비 TO-BE 변경 내용을 설명함.",
+            "steps": [f"<b>{i + 1}. {escape(c[0])}</b> · {escape(c[5])}" for i, c in enumerate(COMPARE)]}
+    return html, json.dumps(note, ensure_ascii=False).replace("</", "<\\/")
 
 def _orig_data(reviews) -> dict:
     """신청서별 원본 미리보기 데이터: 슬라이드 이미지(data URI) 또는 글자, 변환본이면 둘 다."""
@@ -374,7 +384,7 @@ def build() -> Path:
 <style>{CSS}</style></head><body>
 <section id="start">
   <div class="toprow"><h1>투자신청서 점검</h1>
-    <button class="cmpbtn" type="button" data-open="compare">업무 개선 비교 →</button></div>
+    <button class="cmpbtn" type="button" data-open="compare">업무 개선안 보기</button></div>
   <div class="meta">투자신청서(.pptx)를 첨부하고 조회하면 투자검토 결과와 회의자료를 보여 줍니다. 원본은 수정하지 않습니다.</div>
   <label class="drop"><input type="file" accept=".pptx,.ppt" multiple>
     <b>투자신청서 첨부</b>여기로 끌어다 놓거나 눌러서 파일 선택 (.pptx · 표준양식이 아니어도 됨)</label>
@@ -392,7 +402,7 @@ def build() -> Path:
 <div id="result" hidden>
 <header>
   <h1>투자신청서 처리 결과 <a href="#" id="toStart" class="back">← 첨부 화면</a>
-    <a href="#compare" class="back" data-open="compare">업무 개선 비교</a></h1>
+    <a href="#compare" class="back" data-open="compare">업무 개선안</a></h1>
   <div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 원본 신청서는 수정하지 않았습니다</div>
   <div class="flow">
     <div class="step"><h3>① 접수</h3><b>{len(inbox)}</b>건<div class="s">다른 양식 {converted}건 → 표준양식으로 변환</div></div>
