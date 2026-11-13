@@ -19,7 +19,7 @@
 ## 설치
 
 ```text
-/plugin install qna-helper@shipyard-ai
+/plugin install qna-helper@<마켓플레이스 이름>
 ```
 
 설치할 때 게시판 주소(예: `http://localhost:3001`)를 묻습니다. 나중에 바꾸려면 `/plugin configure qna-helper`를 씁니다.
