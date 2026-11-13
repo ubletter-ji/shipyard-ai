@@ -1,5 +1,31 @@
 # Vercel 에는 정적 결과 화면(web/)만 올린다.
 # 파이썬 스크립트·requirements.txt 를 올리면 Vercel 이 파이썬 서버 앱으로 오인해 빌드가 실패한다.
-/*
-!/web
-!/vercel.json
+#
+# 주의: Git 연동 배포에서는 이 패턴이 저장소 루트(shipyard-ai/) 기준으로 적용된다.
+# '/*' + '!/web' 처럼 루트 고정 패턴을 쓰면 capstone/ 전체가 지워져 web 이 비게 된다.
+# 그래서 어디서 적용돼도 같은 결과가 나오도록 루트에 고정하지 않은 제외 목록만 쓴다.
+
+# 파이썬 (서버 앱 오인 방지)
+*.py
+*.pyc
+__pycache__/
+requirements.txt
+scripts/
+tests/
+hooks/
+
+# 에이전트·플러그인 설정
+.claude/
+.claude-plugin/
+plugins/
+
+# 원본·자료 (정적 화면에 불필요)
+inbox/
+samples/
+data/
+config/
+docs/
+out/
+backup_*/
+*.pptx
+*.xlsx
