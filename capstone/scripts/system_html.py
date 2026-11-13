@@ -62,10 +62,10 @@ background:var(--card);cursor:pointer;color:var(--sub)}
 .drop b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}
 .drop input{display:none}
 .files{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.files th,.files td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;font-size:14px}
+.files th,.files td{padding:5px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;font-size:13.5px}
 .files th{color:var(--sub);font-weight:600;background:var(--tab)}
-.files img{width:96px;height:54px;object-fit:cover;border:1px solid var(--line);border-radius:4px;background:#fff;display:block}
-.files .ph{width:96px;height:54px;border:1px dashed var(--line);border-radius:4px}
+.files img{width:64px;height:36px;object-fit:cover;border:1px solid var(--line);border-radius:4px;background:#fff;display:block}
+.files .ph{width:64px;height:36px;border:1px dashed var(--line);border-radius:4px}
 .st{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
 .st.ok{background:#e6f4ec}.st.wait{color:var(--warn);background:#fff4d6}
 @media (prefers-color-scheme:dark){.st.ok{background:#16301f}.st.wait{background:#352a12}}
@@ -176,7 +176,13 @@ table.cmpt col.who{width:46px!important}table.cmpt col.stg{width:58px!important}
 .files{border-radius:0}.files img,.files .ph{border-radius:2px}
 .st{border-radius:2px}.ob{border-radius:3px}
 .go{margin-top:14px}.go button{border-radius:3px;padding:11px 40px;background:var(--fill);color:var(--on);font-weight:800}
-.steps li.run{color:var(--accent)}
+.steps.chev{display:none;margin-top:14px}.steps.chev.on{display:flex}
+.steps .p{cursor:default;padding-top:10px;padding-bottom:10px}
+.steps .p small{display:block;font-size:12px;font-weight:800}.steps .p b{font-size:14px}
+.steps .p.run{background:var(--fill);color:var(--on);animation:pulse 1s ease-in-out infinite}
+.steps .p.done{background:var(--line);color:var(--ink)}.steps .p.done small::before{content:'✔ ';color:var(--ok)}
+@keyframes pulse{50%{filter:brightness(1.25)}}
+#runmsg{font-weight:700;color:var(--accent)}
 header{max-width:1160px;padding:24px 16px 0}
 header .doc{padding-bottom:18px}
 .dochead .hbtns{display:flex;gap:6px;flex-wrap:wrap}
@@ -243,12 +249,17 @@ function showResult(){startEl.hidden=true;resultEl.hidden=false;window.scrollTo(
   ny.innerHTML='<b>점검 전 신청서 '+added.length+'건</b> — '+added.map(n=>n.replace(/[&<]/g,'')).join(', ')+
   ' : 브라우저에서 첨부만 된 상태입니다. inbox 에 넣고 “invest-reviewer 로 inbox 신청서 점검해줘”를 실행하면 결과에 들어갑니다.'}}
 document.getElementById('run').addEventListener('click',()=>{
- const steps=[...document.querySelectorAll('.steps li')];document.querySelector('.steps').classList.add('on');
+ const box=document.querySelector('.steps'), steps=[...box.querySelectorAll('.p')], msg=document.getElementById('runmsg');
+ box.classList.add('on');box.scrollIntoView({behavior:'auto',block:'center'});
+ if(!msg.dataset.orig)msg.dataset.orig=msg.innerHTML;
  document.getElementById('run').disabled=true;let i=0;
- (function tick(){steps.forEach((s,k)=>s.className=k<i?'done':(k===i?'run':''));
-  if(i<steps.length){i++;setTimeout(tick,450)}else setTimeout(showResult,300)})()});
+ (function tick(){steps.forEach((s,k)=>s.className='p'+(k<i?' done':(k===i?' run':'')));
+  msg.textContent=i<steps.length?`점검 실행 중 · ${i+1} / ${steps.length}`:'점검 완료 · 결과 화면으로 이동';
+  if(i<steps.length){i++;setTimeout(tick,800)}else setTimeout(showResult,700)})()});
 document.getElementById('toStart').addEventListener('click',e=>{e.preventDefault();resultEl.hidden=true;startEl.hidden=false;
- document.getElementById('run').disabled=false;document.querySelector('.steps').classList.remove('on')});
+ document.getElementById('run').disabled=false;const box=document.querySelector('.steps');box.classList.remove('on');
+ box.querySelectorAll('.p').forEach(s=>s.className='p');const msg=document.getElementById('runmsg');
+ if(msg.dataset.orig)msg.innerHTML=msg.dataset.orig});
 if(/^#(result|meeting|orig=)/.test(location.hash)){startEl.hidden=true;resultEl.hidden=false;
  if(location.hash==='#meeting')requestAnimationFrame(()=>requestAnimationFrame(()=>{show('meeting');window.scrollTo(0,0)}))}
 
@@ -496,13 +507,13 @@ def build() -> Path:
   <table class="files"><thead><tr><th>미리보기</th><th>파일</th><th>크기</th><th>상태</th></tr></thead>
     <tbody>{file_rows}</tbody></table>
   <div class="go"><button id="run" type="button">조회</button>
-    <span class="s">첨부 <b id="cnt">{len(orig)}</b>건 · inbox 에 접수된 신청서</span></div>
-  <ol class="steps">
-    <li>① 양식 확인 — 다른 양식은 표준양식으로 변환 (내용 그대로)</li>
-    <li>② 규칙 점검 — R-100~R-322</li>
-    <li>③ AI 판단 — 유형 일치 · 필요성 · 산출 재계산</li>
-    <li>④ 회의 상정 · 경영계획 대조 · 회의자료</li>
-  </ol>
+    <span class="s" id="runmsg">첨부 <b id="cnt">{len(orig)}</b>건 · inbox 에 접수된 신청서</span></div>
+  <div class="steps chev">
+    <div class="p"><small>① 양식 확인</small><b>표준양식 변환</b><span>내용 그대로</span></div>
+    <div class="p"><small>② 규칙 점검</small><b>R-100~R-322</b><span>스크립트 확정</span></div>
+    <div class="p"><small>③ AI 판단</small><b>유형·필요성·산출</b><span>판단 필요 선별</span></div>
+    <div class="p"><small>④ 회의자료</small><b>상정·계획 대조</b><span>표지 + 신청서</span></div>
+  </div>
 </div></section>
 <div id="result" hidden>
 <header><div class="doc">
