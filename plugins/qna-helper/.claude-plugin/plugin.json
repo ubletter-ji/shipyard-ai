@@ -1,6 +1,6 @@
 {
   "name": "qna-helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "사내 기술 QnA 게시판을 찾아 근거와 링크를 붙여 답하는 도우미 (MCP 서버 + ask 스킬)",
   "author": {
     "name": "사내 AX팀(예시)"
