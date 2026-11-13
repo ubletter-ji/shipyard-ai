@@ -116,7 +116,7 @@ font-size:13px;overflow-wrap:anywhere}
 .arrowr{display:flex;align-items:center;justify-content:center;color:var(--fill);font-size:16px}
 .dir{border:2px solid var(--fill);display:flex;flex-direction:column}
 .dir .dh{background:var(--fill);color:var(--on);font-weight:700;text-align:center;padding:8px 10px;font-size:14px}
-.dir ol{margin:0;padding:10px 14px 10px 32px;font-size:13.5px;font-weight:600;flex:1;display:flex;flex-direction:column;
+.dir ol{margin:0;padding:10px 14px 10px 32px;font-size:15px;font-weight:700;flex:1;display:flex;flex-direction:column;
 justify-content:space-around;gap:6px}
 .keymsg{display:grid;grid-template-columns:1fr 1.6fr 1fr;margin-top:0;background:var(--fill);color:var(--on)}
 .keymsg>div{padding:12px 16px;border-right:1px solid rgba(255,255,255,.25);min-width:0}.keymsg>div:last-child{border-right:none}
@@ -235,44 +235,25 @@ if(location.hash==='#compare')openCompare(startEl);
 """
 
 # 업무 개선안 (AS-IS / TO-BE) — (단계, AS-IS 주체, AS-IS 내용, TO-BE 주체, TO-BE 내용, 단계 설명)
-# 주체가 '시스템'이면 자동 처리, KEY_STEP 은 담당자가 집중할 단계
 COMPARE = [
-    ("접수", "담당자", "결재 완료 신청서 수합·목록 정리",
-     "담당자", "신청서 파일 지정 폴더(inbox) 등록",
-     "접수 방식 변경 없음. 결재 완료 신청서를 지정 폴더에 등록하는 것으로 착수."),
-    ("양식 점검", "담당자", "신청서별 양식·누락 칸 육안 확인",
-     "시스템", "표준양식 여부 판정, 타 양식은 표준양식으로 변환 (내용 동일 여부 자동 검증)",
-     "신청서를 한 건씩 열어 확인하던 작업을 시스템이 일괄 처리. 타 양식도 내용 변경 없이 표준양식으로 통일."),
-    ("내용 점검", "담당자", "수량·금액·견적·업체 업력·유형별 필수 항목 대조, 보완 요청 작성",
-     "시스템", "검토 기준(R-100~R-322) 일괄 점검, 보완 요청 문안 작성",
-     "수량 한도, 견적 금액 일치, 신생 업체 여부 등 대조 작업을 검토 기준으로 정형화. 신청자 송부용 보완 요청 문안까지 작성."),
-    ("현장 확인", "담당자", "서류 점검 후 잔여 시간 내 수행",
-     "담당자", "점검 결과(보완·판단 필요 항목) 기준 현장 확인, 판단 필요 항목 확정",
-     "담당자 업무의 중심. 서류 대조 부담이 없어진 만큼 실제 장비·설치 위치·필요성 확인에 집중하고, 판단 필요 항목만 확정."),
-    ("회의자료", "담당자", "경영계획 대비 변경 사항 요약장 작성, 신청서 자료 편철",
-     "시스템", "상정 건 경영계획 대조(M-0~M-9), 표지·원본 첨부·브리핑 작성",
-     "경영계획 대비 위치·수량·금액 변경 및 계획 외 건을 표지에 자동 표기. 상정 건 원본을 순서대로 첨부."),
-    ("투자회의", "회의체", "회의 진행·심의",
-     "회의체", "'확인 필요' 표기 건 중심 심의·의사결정",
-     "회의 진행과 의사결정은 기존과 동일. 표지의 '확인 필요' 건(계획 외 등)을 중심으로 심의."),
+    ("접수", "담당자", "신청서 수합·정리", "담당자", "inbox 등록", "접수 방식은 동일."),
+    ("양식 점검", "담당자", "양식·누락 육안 확인", "시스템", "표준양식 판정·자동 변환", "건별 확인 → 시스템 일괄 처리."),
+    ("내용 점검", "담당자", "수량·금액·견적 수작업 대조", "시스템", "기준 일괄 점검·보완 문안 작성",
+     "수작업 대조 → 검토 기준으로 자동 점검, 보완 요청 문안까지."),
+    ("현장 확인", "담당자", "서류 점검 후 남는 시간에", "담당자", "점검 결과 기반 현장 확인·판단",
+     "담당자 업무의 중심. 현장 확인과 판단에 집중."),
+    ("회의자료", "담당자", "요약장 작성·자료 편철", "시스템", "표지·첨부·브리핑 자동 작성", "계획 대비 변경·계획 외 건 자동 표기."),
+    ("투자회의", "회의체", "회의 진행", "회의체", "'확인 필요' 건 중심 심의", "진행·결정은 동일."),
 ]
 KEY_STEP = "현장 확인"
 
-# 추진 배경 — (구분, 현황, 문제점) / 개선 방향
+# 추진 배경 — (구분, 한 줄 요약)
 BACKGROUND = [
-    ("업무량", "전사 설비투자 신청을 소수 담당자가 접수·검토",
-     "담당자 1인당 검토 건수가 많아 양식·내용 점검에 대부분의 시간 소요"),
-    ("인력 구조", "현장 지식을 갖춘 숙련 전문가가 담당해야 하는 업무",
-     "경력 중심 인력 구성으로 AI·디지털 도구 활용 경험과 관심이 적음"),
-    ("업무 방식", "신청서 대조, 보완 요청, 요약장 작성을 수작업으로 반복",
-     "기존 방식이 그대로 유지되어 담당자의 현장 전문성이 서류 업무에 묶임"),
+    ("업무량", "소수 담당자가 전사 투자 검토 → 서류 점검에 시간 대부분"),
+    ("인력 구조", "현장 전문 숙련 인력 중심 → AI 도구 활용 낮음"),
+    ("업무 방식", "수작업 대조·요약장 반복 → 현장 전문성이 서류에 묶임"),
 ]
-DIRECTION = [
-    "반복되는 서류 점검·회의자료 작성은 시스템이 처리",
-    "담당자의 현장 지식은 현장 확인과 판단에 집중",
-    "별도 학습 없이 기존 흐름 그대로 사용 (신청서 등록 → 결과 확인)",
-]
-
+DIRECTION = ["서류 업무는 시스템", "담당자는 현장 확인·판단", "기존 흐름 그대로 사용"]
 
 def _compare_html(reviews, go) -> tuple[str, str]:
     """업무 개선안 화면 (HTML, 단계 설명 JSON)."""
@@ -311,17 +292,16 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     n_auto = sum(1 for c in COMPARE if change(c)[0] == "auto")
 
     effect = [
-        ("서류 점검", "검토 기준에 따른 일괄 점검으로 담당자 대조 작업 대체",
-         f"신청서 {len(reviews)}건 · 점검 {checked}항목"),
-        ("보완 요청", "신청자 송부용 보완 요청 문안 자동 작성", f"{fixes}건"),
-        ("담당자 판단", "판단이 필요한 항목만 선별해 담당자 확정", f"{judge}건"),
-        ("회의자료", "경영계획 대조 표지·원본 첨부·브리핑 자동 작성", f"상정 {len(go)}건"),
-        ("담당자 역할", "서류 점검 중심 → 현장 확인 중심으로 전환", f"담당자 수행 단계 {before} → {after}"),
+        ("서류 점검", "자동 일괄 점검", f"{len(reviews)}건 · {checked}항목"),
+        ("보완 요청", "송부용 문안 자동 작성", f"{fixes}건"),
+        ("담당자 판단", "판단 필요 항목만 선별", f"{judge}건"),
+        ("회의자료", "표지·첨부·브리핑 자동 작성", f"상정 {len(go)}건"),
+        ("담당자 역할", "서류 → 현장 중심", f"수행 단계 {before} → {after}"),
     ]
     eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c num">{escape(c)}</td></tr>'
                   for a, b, c in effect)
-    bg_rows = "".join(f'<tr><td class="c stg">{escape(a)}</td><td>{escape(b)}</td><td class="prob">{escape(c)}</td></tr>'
-                      for a, b, c in BACKGROUND)
+    bg_rows = "".join(f'<tr><td class="c stg">{escape(a)}</td><td class="prob">{escape(b)}</td></tr>'
+                      for a, b in BACKGROUND)
     dir_items = "".join(f"<li>{escape(x)}</li>" for x in DIRECTION)
     steps_auto = " · ".join(c[0] for c in COMPARE if change(c)[0] == "auto")
 
@@ -332,8 +312,8 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     <button class="cmpbtn" id="cmpBack" type="button">돌아가기</button></div></div>
   <h2>추진 배경</h2>
   <div class="bgsec">
-    <table class="cmpt bgt"><colgroup><col style="width:84px"><col><col></colgroup>
-     <thead><tr><th>구분</th><th>현황</th><th>문제점</th></tr></thead>
+    <table class="cmpt bgt"><colgroup><col style="width:84px"><col></colgroup>
+     <thead><tr><th>구분</th><th>현황 → 문제점</th></tr></thead>
      <tbody>{bg_rows}</tbody></table>
     <div class="arrowr" aria-hidden="true">▶</div>
     <div class="dir"><div class="dh">개선 방향</div><ol>{dir_items}</ol></div>
@@ -348,8 +328,7 @@ def _compare_html(reviews, go) -> tuple[str, str]:
 
   <h2>업무 절차</h2>
   <div class="proc">{proc("AS-IS")}{proc("TO-BE")}</div>
-  <div class="legend"><span class="tag auto">자동화</span> 담당자 → 시스템 전환
-    <span class="tag key">중점 전환</span> 담당자 업무 집중 <span class="tag same">변경 없음</span></div>
+  <div class="legend"><span class="tag auto">자동화</span> <span class="tag key">중점 전환</span> <span class="tag same">변경 없음</span></div>
 
   <h2>단계별 비교</h2>
   <table class="cmpt"><colgroup><col class="stg" style="width:84px"><col><col class="who" style="width:64px"><col><col class="who" style="width:64px"><col class="chg" style="width:88px"></colgroup>
@@ -357,16 +336,16 @@ def _compare_html(reviews, go) -> tuple[str, str]:
    <tbody>{trs}</tbody></table>
   <div class="ctl"><button id="cmpPrev" type="button">이전</button><button id="cmpNext" type="button">다음</button>
     <button id="cmpAll" type="button">전체</button><span class="s" id="cmpPos">전체</span>
-    <span class="s">← → 키 또는 단계를 눌러 이동</span></div>
+    <span class="s">← → 키로 이동</span></div>
   <div class="note"></div>
 
   <h2>기대 효과</h2>
   <table class="cmpt"><colgroup><col style="width:110px"><col><col style="width:200px"></colgroup>
    <thead><tr><th>구분</th><th>내용</th><th>적용 실적</th></tr></thead><tbody>{eff}</tbody></table>
-  <div class="foot">※ 적용 실적은 {today:%Y.%m.%d} 점검 기준 (익명화 샘플 신청서). 점검 항목 수는 '해당 없음' 제외.</div>
+  <div class="foot">※ {today:%Y.%m.%d} 점검 기준 (익명화 샘플)</div>
  </div>
 </section>"""
-    note = {"intro": "<b>단계 설명</b> · 이전/다음 버튼으로 단계별 AS-IS 대비 TO-BE 변경 내용을 설명함.",
+    note = {"intro": "<b>단계 설명</b> · 이전/다음으로 단계별 변경 확인",
             "steps": [f"<b>{i + 1}. {escape(c[0])}</b> · {escape(c[5])}" for i, c in enumerate(COMPARE)]}
     return html, json.dumps(note, ensure_ascii=False).replace("</", "<\\/")
 
