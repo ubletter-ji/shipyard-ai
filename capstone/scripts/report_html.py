@@ -18,9 +18,9 @@ _STATE = {
 
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
---ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3}
+--ok:#1e7a46;--ok-bg:#e6f4ec;--bad:#b42318;--bad-bg:#fdecea;--warn:#8a5a00;--warn-bg:#fff4d6;--na:#8a93a3;--on:#fff}
 @media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
---accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584}}
+--accent:#8fb3e0;--ok:#5cc58a;--ok-bg:#16301f;--bad:#f2867b;--bad-bg:#3a1c1a;--warn:#e8c06a;--warn-bg:#352a12;--na:#6c7584;--on:#0b0d11}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 main{max-width:1080px;margin:0 auto;padding:28px 16px 60px}
@@ -28,18 +28,23 @@ h1{font-size:24px;margin:0 0 4px;color:var(--accent)}.meta{color:var(--sub);font
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .tile b{display:block;font-size:26px}.tile span{color:var(--sub);font-size:13px}
+.tile.t-go{border-top:4px solid var(--ok)}.tile.t-go b{color:var(--ok)}
+.tile.t-hold{border-top:4px solid var(--na)}
+.tile.t-bad{border-top:4px solid var(--bad)}.tile.t-bad b{color:var(--bad)}
+.tile.t-warn{border-top:4px solid var(--warn)}.tile.t-warn b{color:var(--warn)}
 .handoff{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:10px;
 padding:12px 16px;margin-bottom:22px}.handoff p{margin:4px 0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
 .head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
 .head h2{font-size:18px;margin:0;flex:1 1 260px}.id{color:var(--sub);font-size:12px;display:block;font-weight:400}
-.badge{border-radius:999px;padding:3px 11px;font-size:13px;font-weight:700;white-space:nowrap}
+.badge{border-radius:3px;padding:3px 11px;font-size:13px;font-weight:700;white-space:nowrap}
+.badge.ok{background:var(--ok);color:var(--on)}.badge.bad{background:var(--bad);color:var(--on)}.badge.warn{background:var(--warn);color:var(--on)}.badge.pass{border:1px solid var(--na);color:var(--ink);background:transparent}
 .ok{color:var(--ok);background:var(--ok-bg)}.bad{color:var(--bad);background:var(--bad-bg)}
 .warn{color:var(--warn);background:var(--warn-bg)}.pass{border:1px solid var(--line);color:var(--sub)}
 .facts{display:flex;flex-wrap:wrap;gap:4px 18px;padding:10px 18px;color:var(--sub);font-size:13px;border-bottom:1px solid var(--line)}
 .body{padding:12px 18px 16px}.clean{color:var(--ok);margin:4px 0}
 .issue{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
-.issue.i-bad{border-left:4px solid var(--bad)}.issue.i-warn{border-left:4px solid var(--warn)}
+.issue.i-bad{border-left:5px solid var(--bad)}.issue.i-warn{border-left:5px solid var(--warn)}
 .issue.i-bad .t{color:var(--bad)}.issue.i-warn .t{color:var(--warn)}
 .issue .t{font-weight:700}.issue .t small{font-weight:400;color:var(--sub);margin-left:6px}
 .why{margin:4px 0 0}.ask{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--bg);display:flex;gap:10px;align-items:flex-start}
@@ -51,7 +56,7 @@ details{margin-top:12px}summary{cursor:pointer;color:var(--sub);font-size:13px}
 .tbl{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
 th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
 th{color:var(--sub);font-weight:600}td.v{white-space:nowrap;font-weight:700}
-td.v.충족{color:var(--ok)}td.v.보완{color:var(--bad)}td.v.판단{color:var(--warn)}td.v.해당{color:var(--na);font-weight:400}
+td.v.충족{color:var(--ok)}td.v.보완{color:var(--bad);background:var(--bad-bg)}td.v.판단{color:var(--warn);background:var(--warn-bg)}td.v.해당{color:var(--na);font-weight:400}
 footer{color:var(--sub);font-size:12px;margin-top:24px}
 a.jump{color:var(--accent);text-decoration:none;border-bottom:1px dashed currentColor;cursor:pointer}
 a.jump::after{content:" ↓";font-size:12px}
@@ -155,10 +160,10 @@ def write_html(reviews: list[dict], path: Path) -> Path:
 <h1>투자신청서 검토 결과</h1>
 <div class="meta">{dt.datetime.now():%Y-%m-%d %H:%M} · 신청서 {len(reviews)}건 · 원본 신청서는 수정하지 않았습니다</div>
 <div class="sum">
-<div class="tile"><b>{len(go)}</b><span>회의 상정</span></div>
-<div class="tile"><b>{len(held)}</b><span>보류</span></div>
-<div class="tile"><b>{n_bad}</b><span>보완 항목 (신청자 회신)</span></div>
-<div class="tile"><b>{n_judge}</b><span>판단 필요 (검토자 확인)</span></div>
+<div class="tile t-go"><b>{len(go)}</b><span>회의 상정</span></div>
+<div class="tile t-hold"><b>{len(held)}</b><span>보류</span></div>
+<div class="tile t-bad"><b>{n_bad}</b><span>보완 항목 (신청자 회신)</span></div>
+<div class="tile t-warn"><b>{n_judge}</b><span>판단 필요 (검토자 확인)</span></div>
 </div>
 <div class="handoff">{handoff}</div>
 {"".join(_card(r) for r in order)}

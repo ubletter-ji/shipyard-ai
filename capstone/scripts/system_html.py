@@ -14,9 +14,11 @@ from common import OUT, ROOT
 
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#e3e6eb;--accent:#1f3a5f;
---ok:#1e7a46;--bad:#b42318;--warn:#8a5a00;--tab:#eef1f5}
+--ok:#1e7a46;--bad:#b42318;--warn:#8a5a00;--tab:#eef1f5;
+--fill:#1f3a5f;--on:#fff;--hi:#c2410c;--on-hi:#fff;--hi-bg:#fff1e6;--mute:#9aa1ad}
 @media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
---accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#2b3440}}
+--accent:#8fb3e0;--ok:#5cc58a;--bad:#f2867b;--warn:#e8c06a;--tab:#2b3440;
+--fill:#3a6aa8;--on:#fff;--hi:#f59e4b;--on-hi:#1a1206;--hi-bg:#3a2614;--mute:#7c8594}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 header{max-width:1160px;margin:0 auto;padding:24px 16px 0}
@@ -26,6 +28,7 @@ h1{font-size:24px;margin:0 0 2px;color:var(--accent)}.meta{color:var(--sub);font
 .step h3{margin:0 0 4px;font-size:13px;color:var(--sub);font-weight:600}
 .step b{font-size:24px}.step .s{font-size:13px;color:var(--sub)}
 .arrow{align-self:center;color:var(--sub);font-size:20px}
+.step.go{border:2px solid var(--ok)}.step.go h3{color:var(--ok)}.step.go b{color:var(--ok)}
 @media (max-width:700px){.arrow{display:none}}
 .ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
 nav{max-width:1160px;margin:0 auto;padding:0 16px;display:flex;gap:6px;border-bottom:1px solid var(--line)}
@@ -96,29 +99,50 @@ border-bottom:2px solid var(--accent);padding-bottom:8px}
 font-size:13px;overflow-wrap:anywhere}
 .proc>div:nth-child(7n){border-right:none}.proc>div:nth-last-child(-n+7){border-bottom:none}
 .proc .lab{background:var(--tab);font-weight:700;color:var(--sub);display:flex;align-items:center;justify-content:center}
+.proc .lab.to{background:var(--fill);color:var(--on)}
 .proc .p b{display:block;font-size:13px}.proc .p span{display:block;font-size:12px;color:var(--sub);margin-top:2px}
-.proc .p.sys span{color:var(--accent)}
-.proc .p.key{background:var(--tab)}.proc .p.key b{color:var(--accent)}
-.proc .p.on{outline:2px solid var(--accent);outline-offset:-2px}
+/* AS-IS 는 흐리게, TO-BE 의 바뀐 단계만 진하게 */
+.proc .p:not(.auto):not(.key):not(.same){color:var(--mute)}.proc .p:not(.auto):not(.key):not(.same) span{color:var(--mute)}
+.proc .p.auto{background:var(--fill);color:var(--on)}.proc .p.auto span{color:var(--on);opacity:.85}
+.proc .p.key{background:var(--hi-bg);box-shadow:inset 0 0 0 3px var(--hi)}.proc .p.key b,.proc .p.key span{color:var(--hi);font-weight:700}
+.proc .p.on{outline:3px solid var(--ink);outline-offset:-3px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:2px;white-space:nowrap;line-height:1.5}
+.tag.auto{background:var(--fill);color:var(--on)}.tag.key{background:var(--hi);color:var(--on-hi)}
+.tag.same{border:1px solid var(--line);color:var(--sub);padding:1px 7px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:12px;color:var(--sub);margin-top:8px}
+.legend .tag{margin-left:8px}.legend .tag:first-child{margin-left:0}
+.keymsg{display:grid;grid-template-columns:1fr 1.6fr 1fr;margin-top:14px;background:var(--fill);color:var(--on)}
+.keymsg>div{padding:12px 16px;border-right:1px solid rgba(255,255,255,.25);min-width:0}.keymsg>div:last-child{border-right:none}
+.keymsg small{display:block;font-size:12px;opacity:.85}.keymsg b{display:block;font-size:20px;line-height:1.35;overflow-wrap:anywhere}
+.keymsg .k{background:var(--hi);color:var(--on-hi)}
 table.cmpt{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
 table.cmpt th,table.cmpt td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}
 table.cmpt th{background:var(--tab);font-weight:700;color:var(--ink);text-align:center}
+table.cmpt th.to{background:var(--fill);color:var(--on)}
 table.cmpt td.c{text-align:center;color:var(--sub)}
-table.cmpt td.sys{color:var(--accent);font-weight:600}
-table.cmpt tr.on td{background:var(--tab)}table.cmpt tr.on td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+table.cmpt td.as{color:var(--sub)}table.cmpt td.stg{font-weight:700;color:var(--ink)}
+table.cmpt tr.r-auto td.to{font-weight:700;color:var(--ink)}table.cmpt tr.r-auto td.c.to{color:var(--accent)}
+table.cmpt tr.r-key td{background:var(--hi-bg)}table.cmpt tr.r-key td.to{font-weight:700;color:var(--hi)}
+table.cmpt tr.r-same td{color:var(--mute)}table.cmpt tr.r-same td.stg{color:var(--sub)}
+table.cmpt tr.on td{background:var(--tab)}table.cmpt tr.on td:first-child{box-shadow:inset 5px 0 0 var(--ink)}
+table.cmpt tr.r-key.on td{background:var(--hi-bg)}
 table.cmpt tr[data-step]{cursor:pointer}
+table.cmpt td.num{font-weight:700;font-size:15px;color:var(--accent)}
 .ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px}
 .ctl button{font:inherit;font-size:13px;padding:5px 14px;border:1px solid var(--line);border-radius:3px;background:var(--card);
 color:var(--ink);cursor:pointer}.ctl button:hover{border-color:var(--accent)}
 .ctl .s{color:var(--sub);font-size:12px;margin-left:6px}
-.note{margin-top:8px;border:1px solid var(--line);background:var(--bg);padding:9px 12px;font-size:13.5px;min-height:40px}
+.note{margin-top:8px;border:1px solid var(--line);border-left:4px solid var(--fill);background:var(--bg);padding:9px 12px;
+font-size:14px;min-height:40px}
 .foot{font-size:12px;color:var(--sub);margin-top:8px}
 @media (max-width:760px){#compare .doc{padding:16px 14px}
 .proc{grid-template-columns:52px repeat(3,minmax(0,1fr))}
 .proc>div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
 .proc .lab{grid-row:span 2}
 table.cmpt{font-size:12.5px}table.cmpt th,table.cmpt td{padding:6px}
-table.cmpt col.who{width:52px!important}table.cmpt col.stg{width:64px!important}}
+table.cmpt col.who{width:46px!important}table.cmpt col.stg{width:58px!important}table.cmpt col.chg{width:64px!important}
+.keymsg{grid-template-columns:1fr}.keymsg>div{border-right:none;border-bottom:1px solid rgba(255,255,255,.25)}
+.keymsg b{font-size:17px}}
 """
 
 JS = r"""
@@ -238,18 +262,30 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     after = sum(1 for c in COMPARE if c[3] == "담당자")
     today = dt.date.today()
 
+    def change(c):
+        """AS-IS → TO-BE 변경 구분: (css 클래스, 표시 글자)."""
+        if c[0] == KEY_STEP:
+            return "key", "중점 전환"
+        if c[3] == "시스템" and c[1] != "시스템":
+            return "auto", "자동화"
+        return "same", "변경 없음"
+
     def proc(side):
         cells = []
         for i, c in enumerate(COMPARE):
             who = c[1] if side == "AS-IS" else c[3]
-            cls = "p" + (" sys" if who == "시스템" else "") + (" key" if side == "TO-BE" and c[0] == KEY_STEP else "")
-            cells.append(f'<div class="{cls}" data-step="{i}"><b>{escape(c[0])}</b><span>{escape(who)}</span></div>')
-        return f'<div class="lab">{side}</div>' + "".join(cells)
+            cls = "p" if side == "AS-IS" else "p " + change(c)[0]
+            label = who + (" · 중점" if side == "TO-BE" and c[0] == KEY_STEP else "")
+            cells.append(f'<div class="{cls}" data-step="{i}"><b>{escape(c[0])}</b><span>{escape(label)}</span></div>')
+        return f'<div class="lab{" to" if side == "TO-BE" else ""}">{side}</div>' + "".join(cells)
 
     trs = "".join(
-        f'<tr data-step="{i}"><td class="c">{escape(s)}</td><td>{escape(at)}</td><td class="c">{escape(aw)}</td>'
-        f'<td>{escape(tt)}</td><td class="c{" sys" if tw == "시스템" else ""}">{escape(tw)}</td></tr>'
-        for i, (s, aw, at, tw, tt, _) in enumerate(COMPARE))
+        f'<tr data-step="{i}" class="r-{change(c)[0]}"><td class="c stg">{escape(c[0])}</td>'
+        f'<td class="as">{escape(c[2])}</td><td class="c as">{escape(c[1])}</td>'
+        f'<td class="to">{escape(c[4])}</td><td class="c to">{escape(c[3])}</td>'
+        f'<td class="c"><span class="tag {change(c)[0]}">{change(c)[1]}</span></td></tr>'
+        for i, c in enumerate(COMPARE))
+    n_auto = sum(1 for c in COMPARE if change(c)[0] == "auto")
 
     effect = [
         ("서류 점검", "검토 기준에 따른 일괄 점검으로 담당자 대조 작업 대체",
@@ -259,22 +295,29 @@ def _compare_html(reviews, go) -> tuple[str, str]:
         ("회의자료", "경영계획 대조 표지·원본 첨부·브리핑 자동 작성", f"상정 {len(go)}건"),
         ("담당자 역할", "서류 점검 중심 → 현장 확인 중심으로 전환", f"담당자 수행 단계 {before} → {after}"),
     ]
-    eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c">{escape(c)}</td></tr>'
+    eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c num">{escape(c)}</td></tr>'
                   for a, b, c in effect)
+    steps_auto = " · ".join(c[0] for c in COMPARE if change(c)[0] == "auto")
 
     html = f"""<section id="compare" hidden>
  <div class="doc">
   <div class="dochead"><h1>투자검토 업무 개선안 (AS-IS / TO-BE)</h1>
     <div class="toprow"><span class="meta">{today:%Y.%m.%d} · 설비투자 투자검토·투자회의</span>
     <button class="cmpbtn" id="cmpBack" type="button">돌아가기</button></div></div>
-  <p class="lead">신청서 양식·내용 점검과 회의자료 작성은 시스템이 처리하고, 담당자는 <b>현장 확인</b>과 판단 업무에 집중함.</p>
+  <div class="keymsg">
+    <div><small>담당자 수행 단계</small><b>{before} → {after}</b></div>
+    <div><small>시스템 전환 ({n_auto}단계)</small><b>{escape(steps_auto)}</b></div>
+    <div class="k"><small>담당자 중점 업무</small><b>{escape(KEY_STEP)}</b></div>
+  </div>
 
   <h2>업무 절차</h2>
   <div class="proc">{proc("AS-IS")}{proc("TO-BE")}</div>
+  <div class="legend"><span class="tag auto">자동화</span> 담당자 → 시스템 전환
+    <span class="tag key">중점 전환</span> 담당자 업무 집중 <span class="tag same">변경 없음</span></div>
 
   <h2>단계별 비교</h2>
-  <table class="cmpt"><colgroup><col class="stg" style="width:90px"><col><col class="who" style="width:72px"><col><col class="who" style="width:72px"></colgroup>
-   <thead><tr><th>단계</th><th>AS-IS</th><th>수행</th><th>TO-BE</th><th>수행</th></tr></thead>
+  <table class="cmpt"><colgroup><col class="stg" style="width:84px"><col><col class="who" style="width:64px"><col><col class="who" style="width:64px"><col class="chg" style="width:88px"></colgroup>
+   <thead><tr><th>단계</th><th>AS-IS</th><th>수행</th><th class="to">TO-BE</th><th class="to">수행</th><th>변경</th></tr></thead>
    <tbody>{trs}</tbody></table>
   <div class="ctl"><button id="cmpPrev" type="button">이전</button><button id="cmpNext" type="button">다음</button>
     <button id="cmpAll" type="button">전체</button><span class="s" id="cmpPos">전체</span>
@@ -410,7 +453,7 @@ def build() -> Path:
     <div class="step"><h3>② 투자검토</h3><b class="ok">{passed}</b> 통과 · <b class="bad">{fix}</b> 보완 · <b class="warn">{check}</b> 확인
       <div class="s">보완 = 신청자에게 문구 전달 / 확인 = 검토자 O</div></div>
     <div class="arrow">→</div>
-    <div class="step"><h3>③ 회의 상정</h3><b>{len(go)}</b>건<div class="s">보완 0 + 검토자 확인 완료 (R-401)</div></div>
+    <div class="step go"><h3>③ 회의 상정</h3><b>{len(go)}</b>건<div class="s">보완 0 + 검토자 확인 완료 (R-401)</div></div>
     <div class="arrow">→</div>
     <div class="step"><h3>④ 회의자료</h3><b>{escape(meeting_label)}</b><div class="s">경영계획 대조 표지 + 신청서</div></div>
   </div>

@@ -18,9 +18,9 @@ DETAIL_ROWS = [["투자시작", "투자경과", "투자금액(백만원)", "투�
 
 CSS = """
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--sub:#5b6474;--line:#d9dde3;--accent:#1f3a5f;--label:#fff2cc;
---head:#dbe5f1;--up:#b42318;--down:#1f5fbf;--warn:#8a5a00;--warn-bg:#fff4d6}
+--head:#dbe5f1;--up:#b42318;--down:#1f5fbf;--warn:#8a5a00;--warn-bg:#fff4d6;--on:#fff}
 @media (prefers-color-scheme:dark){:root{--bg:#0b0d11;--card:#20262f;--ink:#e9ecf1;--sub:#a7b0bf;--line:#3c4553;
---accent:#8fb3e0;--label:#3a3420;--head:#22324a;--up:#f2867b;--down:#7fb0f0;--warn:#e8c06a;--warn-bg:#352a12}}
+--accent:#8fb3e0;--label:#3a3420;--head:#22324a;--up:#f2867b;--down:#7fb0f0;--warn:#e8c06a;--warn-bg:#352a12;--on:#0b0d11}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 main{max-width:1120px;margin:0 auto;padding:28px 16px 60px}
@@ -33,12 +33,13 @@ h1{font-size:26px;margin:0 0 4px;color:var(--accent)}h2{font-size:20px;margin:0}
 .scroll{overflow-x:auto}
 table{border-collapse:collapse;width:100%}
 th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}
-.cover th{background:var(--accent);color:#fff;white-space:nowrap}
+.cover th{background:var(--accent);color:var(--on);white-space:nowrap}
 .cover td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .cover tr.sum td{font-weight:700;background:var(--head)}
-.up{color:var(--up)}.down{color:var(--down)}
-.chk{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:12px;font-weight:700;
-color:var(--warn);background:var(--warn-bg)}
+.up{color:var(--up);font-weight:700}.down{color:var(--down);font-weight:700}
+.cover tr.need td{background:var(--warn-bg)}.cover tr.need td:first-child{box-shadow:inset 4px 0 0 var(--warn)}
+.chk{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:2px;font-size:12px;font-weight:700;
+color:var(--on);background:var(--warn)}
 .notes{margin:12px 0 0;padding-left:18px;color:var(--sub);font-size:14px}.notes li{margin:3px 0}
 .toc{columns:2;column-gap:28px;margin:0;padding-left:18px}.toc li{margin:3px 0}
 @media (max-width:640px){.toc{columns:1}}
@@ -142,11 +143,11 @@ def write_meeting_html(rows: list[dict], 미신청: list[dict], 보류: list[dic
     plan = sum(r["경영계획"] for r in rows)
     exe = sum(r["실행금액"] for r in rows)
     body_rows = "".join(
-        f'<tr><td>{r["_no"]}</td><td><a class="jump" href="#app{r["_no"]}" data-target="app{r["_no"]}" title="아래 신청서로 이동">{escape(r["투자명"])}</a></td>'
+        f'<tr{' class="need"' if r["확인필요"] else ''}><td>{r["_no"]}</td><td><a class="jump" href="#app{r["_no"]}" data-target="app{r["_no"]}" title="아래 신청서로 이동">{escape(r["투자명"])}</a></td>'
         f'<td>{escape(r["투자유형"])}</td><td>{escape(r["계획NO"])}</td>'
         f'<td class="n">{fmt_num(r["경영계획"])}</td><td class="n">{fmt_num(r["실행금액"])}</td>'
         f'<td class="n {_cls(r["차이금액"])}">{_diff(r["차이금액"])}</td>'
-        f'<td>{escape(r["비고"])}{"<span class=chk>확인 필요</span>" if r["확인필요"] else ""}</td></tr>'
+        f'<td>{escape(r["비고"])}{" <span class=chk>확인 필요</span>" if r["확인필요"] else ""}</td></tr>'
         for r in rows)
     notes = []
     if 미신청:
