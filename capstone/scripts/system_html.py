@@ -199,6 +199,22 @@ nav button[aria-selected=true]{background:var(--fill);color:var(--on);border-col
 .mbox,.notyet{border-radius:3px}
 @media (max-width:760px){.rflow .p b{font-size:18px}.rflow .p small,.rflow .p span{font-size:10px}
 .go button{width:100%}}
+
+/* ---- 운영 규칙 · 안전장치 */
+#guide{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
+.layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line)}
+.layers>div{border-right:1px solid var(--line);min-width:0}.layers>div:last-child{border-right:none}
+.layers h3{margin:0;padding:10px 14px;background:var(--fill);color:var(--on);font-size:15px;font-weight:800;letter-spacing:-.3px}
+.layers h3 small{display:block;font-size:11.5px;font-weight:600;opacity:.85}
+.layers .lx{padding:10px 14px;font-size:13.5px}
+.layers .lx b{display:block;font-size:16px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.layers .lx code{font-size:12px}
+.tag.block{background:var(--bad);color:var(--on-hi)}.tag.ask{background:var(--warn);color:var(--on-hi)}
+.tag.log{border:1px solid var(--line);color:var(--sub);padding:1px 7px}
+.guidechev .p{cursor:default;padding-top:11px;padding-bottom:11px}
+.guidechev .p small{display:block;font-size:11.5px;font-weight:700;opacity:.9}
+table.cmpt code{font-size:12px;background:var(--tab);padding:0 4px}
+@media (max-width:760px){.layers{grid-template-columns:1fr}.layers>div{border-right:none;border-bottom:1px solid var(--line)}}
 """
 
 JS = r"""
@@ -285,6 +301,16 @@ document.addEventListener('keydown',e=>{if(cmpEl.hidden||modal.classList.contain
  else if(e.key==='ArrowLeft'){e.preventDefault();document.getElementById('cmpPrev').click()}
  else if(e.key==='Escape')closeCompare()});
 if(location.hash==='#compare')openCompare(startEl);
+
+// ---- 운영 규칙 · 안전장치
+const guideEl=document.getElementById('guide');let gfrom=startEl;
+function openGuide(){gfrom=[startEl,resultEl,cmpEl].find(e=>!e.hidden)||startEl;
+ [startEl,resultEl,cmpEl].forEach(e=>e.hidden=true);guideEl.hidden=false;window.scrollTo(0,0)}
+function closeGuide(){guideEl.hidden=true;gfrom.hidden=false;window.scrollTo(0,0)}
+document.querySelectorAll('[data-open=guide]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();openGuide()}));
+document.getElementById('guideBack').addEventListener('click',closeGuide);
+document.addEventListener('keydown',e=>{if(!guideEl.hidden&&e.key==='Escape'&&!modal.classList.contains('on'))closeGuide()});
+if(location.hash==='#guide')openGuide();
 """
 
 # 업무 개선안 (AS-IS / TO-BE) — (단계, AS-IS 주체, AS-IS 내용, TO-BE 주체, TO-BE 내용, 단계 설명)
@@ -404,6 +430,83 @@ def _compare_html(reviews, go) -> tuple[str, str]:
             "steps": [f"<b>{i + 1}. {escape(c[0])}</b> · {escape(c[5])}" for i, c in enumerate(COMPARE)]}
     return html, json.dumps(note, ensure_ascii=False).replace("</", "<\\/")
 
+def _guide_html() -> str:
+    """운영 규칙 · 안전장치 화면: CLAUDE.md(규칙) · settings.json(권한 deny) · 훅."""
+    import re
+    md = (ROOT / "CLAUDE.md").read_text(encoding="utf-8") if (ROOT / "CLAUDE.md").exists() else ""
+    n_r = len(re.findall(r"^\| R-\d+", md, re.M))
+    n_m = len(re.findall(r"^\| M-\d+", md, re.M))
+    n_t = len(re.findall(r"^\| T\d+", md, re.M))
+    today = dt.date.today()
+
+    md_rows = [
+        ("업무 규칙", f"검토 규칙 R-100~R-401 ({n_r}개) · 회의 매칭 M-0~M-9 ({n_m}개) · 정답셋 T1~T{n_t}",
+         "규칙의 기준 문서"),
+        ("작업 규칙", "원본 읽기 전용, 산출물은 out/ 에만 · 확정 판정 변경 금지 · 검토자 확인(O)은 사람만 · 비밀 값 저장 금지",
+         "훅이 강제"),
+        ("규칙 관리", "변경 순서 7단계 · 변경 이력(정한 사람) · 테스트가 문서와 코드 일치 확인", "합의 전 '판단 필요'"),
+    ]
+    hook_rows = [
+        ("도구 실행 직전", "PreToolUse", "guard.py", "원본 쓰기 · 위험 명령 · 비밀 값 저장 검사",
+         '<span class="tag block">에이전트 차단</span> <span class="tag ask">대화 세션 승인 요청</span>'),
+        ("에이전트 시작", "SubagentStart", "inbox_watch.py snapshot", "inbox · data · 기준 문서 지문(SHA-256) 기록",
+         '<span class="tag log">기록</span>'),
+        ("에이전트 종료", "SubagentStop", "inbox_watch.py verify", "지문 다시 계산해 비교",
+         '<span class="tag ask">바뀌면 경고</span>'),
+    ]
+    cases = [
+        ("수량 칸 변환 스크립트 실행", "guard.py", "원본(inbox) 을 바꾸는 도구 → 차단, 사용자가 터미널에서 직접 실행",
+         '<span class="tag block">차단</span>'),
+        ("원본 폴더(data/)가 들어간 복사 명령", "권한 deny", "원본 경로 작업 → 실행 전 차단", '<span class="tag block">차단</span>'),
+        ("명령에 data/ 언급 + 파일 저장", "guard.py", "원본 쓰기로 판단 → 차단 (안전한 쪽으로 동작)",
+         '<span class="tag block">차단</span>'),
+        ("invest-reviewer · invest-meeting 실행 4회", "inbox_watch.py", "원본 변경 경고 0건 (점검 3회는 전후 지문 동일 확인)",
+         '<span class="tag log">이상 없음</span>'),
+    ]
+    tr = lambda cells: "<tr>" + "".join(cells) + "</tr>"
+    md_html = "".join(tr([f'<td class="c stg">{escape(a)}</td>', f"<td>{escape(b)}</td>", f'<td class="c">{escape(c)}</td>'])
+                      for a, b, c in md_rows)
+    hook_html = "".join(tr([f'<td class="c stg">{escape(a)}<br><code>{escape(e)}</code></td>',
+                            f"<td><code>{escape(h)}</code></td>", f"<td>{escape(d)}</td>", f'<td class="c">{tag}</td>'])
+                        for a, e, h, d, tag in hook_rows)
+    case_html = "".join(tr([f"<td>{escape(a)}</td>", f'<td class="c">{escape(b)}</td>', f"<td>{escape(c)}</td>",
+                            f'<td class="c">{tag}</td>']) for a, b, c, tag in cases)
+    return f"""<section id="guide" hidden>
+ <div class="doc">
+  <div class="dochead"><div><h1>운영 규칙 · 안전장치 <span class="ttag">CLAUDE.md · 훅</span></h1>
+    <div class="meta">{today:%Y.%m.%d} · 에이전트가 무엇을 따르고, 무엇을 못 하게 막는가</div></div>
+    <button class="cmpbtn" id="guideBack" type="button">돌아가기</button></div>
+
+  <h2>구성 한눈에</h2>
+  <div class="layers">
+    <div><h3><small>① 규칙</small>CLAUDE.md</h3><div class="lx"><b>무엇을 해야 하나</b>업무 규칙·작업 규칙을 매 세션 읽고 따름</div></div>
+    <div><h3><small>② 권한</small>settings.json · deny</h3><div class="lx"><b>절대 못 하는 것</b>원본 편집 · .env 읽기 · 강제 push · reset --hard</div></div>
+    <div><h3><small>③ 훅</small>guard.py · inbox_watch.py</h3><div class="lx"><b>실행 전후 자동 검사</b>규칙을 어기는 실행은 막고, 원본 변경은 감지</div></div>
+  </div>
+
+  <h2>CLAUDE.md — 에이전트가 따르는 규칙</h2>
+  <table class="cmpt"><colgroup><col class="stg" style="width:96px"><col><col style="width:150px"></colgroup>
+   <thead><tr><th>구분</th><th>내용</th><th>비고</th></tr></thead><tbody>{md_html}</tbody></table>
+
+  <h2>훅 — 실행 전후 자동 안전장치</h2>
+  <table class="cmpt"><colgroup><col class="stg" style="width:130px"><col style="width:190px"><col><col style="width:200px"></colgroup>
+   <thead><tr><th>시점</th><th>훅</th><th>하는 일</th><th>처리</th></tr></thead><tbody>{hook_html}</tbody></table>
+
+  <h2>동작 흐름</h2>
+  <div class="chev guidechev">
+    <div class="p same"><small>STEP 1</small><b>CLAUDE.md 읽기</b><span>규칙·작업 범위 확인</span></div>
+    <div class="p auto"><small>STEP 2</small><b>실행 직전 검사</b><span>권한 deny + guard.py</span></div>
+    <div class="p key"><small>STEP 3</small><b>통과만 실행</b><span>막히면 이유 전달</span></div>
+    <div class="p auto"><small>STEP 4</small><b>종료 후 지문 비교</b><span>원본 바뀌면 경고</span></div>
+  </div>
+
+  <h2>이번 작업에서 실제로 동작한 사례</h2>
+  <table class="cmpt"><colgroup><col><col style="width:120px"><col><col style="width:100px"></colgroup>
+   <thead><tr><th>시도</th><th>막은 곳</th><th>결과</th><th>처리</th></tr></thead><tbody>{case_html}</tbody></table>
+  <div class="foot">※ {today:%Y.%m.%d} 작업 기준 · 원본 = inbox/ · data/ · samples/ · backup_*/ · 기준 문서 2개</div>
+ </div>
+</section>"""
+
 def _orig_data(reviews) -> dict:
     """신청서별 원본 미리보기 데이터: 슬라이드 이미지(data URI) 또는 글자, 변환본이면 둘 다."""
     import base64
@@ -499,7 +602,8 @@ def build() -> Path:
 <section id="start"><div class="doc">
   <div class="dochead"><div><h1>투자신청서 점검 <span class="ttag">투자검토 · 투자회의</span></h1>
     <div class="meta">신청서(.pptx) 첨부 → 조회 → 투자검토 결과·회의자료 · 원본은 수정하지 않음</div></div>
-    <button class="cmpbtn" type="button" data-open="compare">업무 개선안 보기</button></div>
+    <div class="hbtns"><button class="cmpbtn" type="button" data-open="compare">업무 개선안 보기</button>
+    <button class="cmpbtn" type="button" data-open="guide">운영 규칙 · 안전장치</button></div></div>
   <h2>신청서 첨부</h2>
   <label class="drop"><input type="file" accept=".pptx,.ppt" multiple>
     <b>투자신청서 첨부</b>여기로 끌어다 놓거나 눌러서 파일 선택 (.pptx · 표준양식이 아니어도 됨)</label>
@@ -520,7 +624,8 @@ def build() -> Path:
   <div class="dochead"><div><h1>투자신청서 처리 결과 <span class="ttag">{dt.datetime.now():%Y.%m.%d %H:%M}</span></h1>
     <div class="meta">원본 신청서는 수정하지 않았습니다</div></div>
     <div class="hbtns"><button class="cmpbtn" id="toStart" type="button">← 첨부 화면</button>
-    <button class="cmpbtn" type="button" data-open="compare">업무 개선안</button></div></div>
+    <button class="cmpbtn" type="button" data-open="compare">업무 개선안</button>
+    <button class="cmpbtn" type="button" data-open="guide">운영 규칙</button></div></div>
   <h2>처리 현황</h2>
   <div class="chev rflow">
     <div class="p same"><small>① 접수</small><b>{len(inbox)}건</b><span>다른 양식 {converted}건 변환</span></div>
@@ -540,6 +645,7 @@ def build() -> Path:
 <section id="meeting" class="panel">{meeting_panel}</section>
 </div>
 {compare_html}
+{_guide_html()}
 <div id="modal" class="modal" role="dialog" aria-modal="true"><div class="mbox"></div></div>
 <script id="saydata" type="application/json">{say_json}</script>
 <script id="origdata" type="application/json">{json.dumps(orig, ensure_ascii=False).replace("</", "<\\/")}</script>
