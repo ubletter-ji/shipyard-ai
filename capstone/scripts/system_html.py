@@ -111,7 +111,14 @@ font-size:13px;overflow-wrap:anywhere}
 .tag.same{border:1px solid var(--line);color:var(--sub);padding:1px 7px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:12px;color:var(--sub);margin-top:8px}
 .legend .tag{margin-left:8px}.legend .tag:first-child{margin-left:0}
-.keymsg{display:grid;grid-template-columns:1fr 1.6fr 1fr;margin-top:14px;background:var(--fill);color:var(--on)}
+.bgsec{display:grid;grid-template-columns:minmax(0,1.9fr) 28px minmax(0,1fr);align-items:stretch;gap:0}
+.bgt td.prob{color:var(--bad);font-weight:600}
+.arrowr{display:flex;align-items:center;justify-content:center;color:var(--fill);font-size:16px}
+.dir{border:2px solid var(--fill);display:flex;flex-direction:column}
+.dir .dh{background:var(--fill);color:var(--on);font-weight:700;text-align:center;padding:8px 10px;font-size:14px}
+.dir ol{margin:0;padding:10px 14px 10px 32px;font-size:13.5px;font-weight:600;flex:1;display:flex;flex-direction:column;
+justify-content:space-around;gap:6px}
+.keymsg{display:grid;grid-template-columns:1fr 1.6fr 1fr;margin-top:0;background:var(--fill);color:var(--on)}
 .keymsg>div{padding:12px 16px;border-right:1px solid rgba(255,255,255,.25);min-width:0}.keymsg>div:last-child{border-right:none}
 .keymsg small{display:block;font-size:12px;opacity:.85}.keymsg b{display:block;font-size:20px;line-height:1.35;overflow-wrap:anywhere}
 .keymsg .k{background:var(--hi);color:var(--on-hi)}
@@ -141,6 +148,7 @@ font-size:14px;min-height:40px}
 .proc .lab{grid-row:span 2}
 table.cmpt{font-size:12.5px}table.cmpt th,table.cmpt td{padding:6px}
 table.cmpt col.who{width:46px!important}table.cmpt col.stg{width:58px!important}table.cmpt col.chg{width:64px!important}
+.bgsec{grid-template-columns:1fr}.arrowr{transform:rotate(90deg);height:26px}
 .keymsg{grid-template-columns:1fr}.keymsg>div{border-right:none;border-bottom:1px solid rgba(255,255,255,.25)}
 .keymsg b{font-size:17px}}
 """
@@ -250,6 +258,21 @@ COMPARE = [
 ]
 KEY_STEP = "현장 확인"
 
+# 추진 배경 — (구분, 현황, 문제점) / 개선 방향
+BACKGROUND = [
+    ("업무량", "전사 설비투자 신청을 소수 담당자가 접수·검토",
+     "담당자 1인당 검토 건수가 많아 양식·내용 점검에 대부분의 시간 소요"),
+    ("인력 구조", "현장 지식을 갖춘 숙련 전문가가 담당해야 하는 업무",
+     "경력 중심 인력 구성으로 AI·디지털 도구 활용 경험과 관심이 적음"),
+    ("업무 방식", "신청서 대조, 보완 요청, 요약장 작성을 수작업으로 반복",
+     "기존 방식이 그대로 유지되어 담당자의 현장 전문성이 서류 업무에 묶임"),
+]
+DIRECTION = [
+    "반복되는 서류 점검·회의자료 작성은 시스템이 처리",
+    "담당자의 현장 지식은 현장 확인과 판단에 집중",
+    "별도 학습 없이 기존 흐름 그대로 사용 (신청서 등록 → 결과 확인)",
+]
+
 
 def _compare_html(reviews, go) -> tuple[str, str]:
     """업무 개선안 화면 (HTML, 단계 설명 JSON)."""
@@ -297,6 +320,9 @@ def _compare_html(reviews, go) -> tuple[str, str]:
     ]
     eff = "".join(f'<tr><td class="c">{escape(a)}</td><td>{escape(b)}</td><td class="c num">{escape(c)}</td></tr>'
                   for a, b, c in effect)
+    bg_rows = "".join(f'<tr><td class="c stg">{escape(a)}</td><td>{escape(b)}</td><td class="prob">{escape(c)}</td></tr>'
+                      for a, b, c in BACKGROUND)
+    dir_items = "".join(f"<li>{escape(x)}</li>" for x in DIRECTION)
     steps_auto = " · ".join(c[0] for c in COMPARE if change(c)[0] == "auto")
 
     html = f"""<section id="compare" hidden>
@@ -304,6 +330,16 @@ def _compare_html(reviews, go) -> tuple[str, str]:
   <div class="dochead"><h1>투자검토 업무 개선안 (AS-IS / TO-BE)</h1>
     <div class="toprow"><span class="meta">{today:%Y.%m.%d} · 설비투자 투자검토·투자회의</span>
     <button class="cmpbtn" id="cmpBack" type="button">돌아가기</button></div></div>
+  <h2>추진 배경</h2>
+  <div class="bgsec">
+    <table class="cmpt bgt"><colgroup><col style="width:84px"><col><col></colgroup>
+     <thead><tr><th>구분</th><th>현황</th><th>문제점</th></tr></thead>
+     <tbody>{bg_rows}</tbody></table>
+    <div class="arrowr" aria-hidden="true">▶</div>
+    <div class="dir"><div class="dh">개선 방향</div><ol>{dir_items}</ol></div>
+  </div>
+
+  <h2>핵심 변화</h2>
   <div class="keymsg">
     <div><small>담당자 수행 단계</small><b>{before} → {after}</b></div>
     <div><small>시스템 전환 ({n_auto}단계)</small><b>{escape(steps_auto)}</b></div>
